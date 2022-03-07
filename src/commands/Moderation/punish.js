@@ -218,10 +218,10 @@ module.exports = class Punish extends Command {
 
     if (USER) {
       const member = message.guild.members.cache.get(USER.id);
-      if(member.roles.highest.position >= message.member.roles.highest.position) return message.reply(`${e.Error} | ${message.author}, este membro possui cargo mais alto ou equivalente ao seu!`)
-      else if(member.roles.highest.position >= message.guild.me.roles.highest.position) return message.reply(`${e.Error} | ${message.author}, este membro possui cargo mais alto ou equivalente ao meu!`)
-      else if(USER.id == this.client.user.id) return message.reply(`${e.Error} | ${message.author}, você não pode me punir.`)
+      if(USER.id == this.client.user.id) return message.reply(`${e.Error} | ${message.author}, você não pode me punir.`)
       else if(USER.id == message.author.id) return message.reply(`${e.Error} | ${message.author}, você não pode se punir.`)
+      else if(member.roles.highest.position >= message.member.roles.highest.position) return message.reply(`${e.Error} | ${message.author}, este membro possui cargo mais alto ou equivalente ao seu!`)
+      else if(member.roles.highest.position >= message.guild.me.roles.highest.position) return message.reply(`${e.Error} | ${message.author}, este membro possui cargo mais alto ou equivalente ao meu!`)
 
       const embed = new Embed(message.author)
         .setAuthor({ name: USER.tag, iconURL: USER.avatarURL() })
