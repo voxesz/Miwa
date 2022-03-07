@@ -188,7 +188,9 @@ module.exports = class Captcha extends Command {
 
           if(guildDBData.captcha.msg !== "null") {
             const canal = this.client.channels.cache.get(guildDBData.captcha.channel)
+            if(!canal) return;
             const sexo = await canal.messages.fetch(`${guildDBData.captcha.msg}`)
+            if(!sexo) return;
             sexo.delete()
           }
           const mensagem = await channel.send({embeds: [embed], components: [row]})
