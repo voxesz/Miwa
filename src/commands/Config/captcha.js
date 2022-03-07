@@ -183,10 +183,11 @@ module.exports = class Captcha extends Command {
               .setCustomId('captcha')
               .setLabel('Verificar')
               .setStyle("SECONDARY")
+              .setEmoji(e.Correct)
           )
           await channel.send({embeds: [embed], components: [row]})
           return message.reply(
-            `${e.Correct} | ${message.author}, o canal ${channel} foi adicionado com sucesso ao sistema.`
+            `${e.Correct} | ${message.author}, o sistema foi iniciado com sucesso no canal ${channel}.`
           );
         }
       }

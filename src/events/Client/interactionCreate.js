@@ -11,7 +11,7 @@ module.exports = class interactionCreate {
 
     const guildDBData = await this.client.guildDB.findOne({guildID: interaction.guild.id})
 
-    if (interaction.isButton() && interaction.customId === "add") {
+    if (interaction.isButton() && interaction.customId === "captcha") {
         interaction.deferUpdate();
 
         const role = guildDBData.captcha.role
