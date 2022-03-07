@@ -189,13 +189,12 @@ module.exports = class Captcha extends Command {
           if(guildDBData.captcha.msg !== "null") {
             const msg = guildDBData.captcha.msg
             msg.delete()
-          } else {
+          }
           const mensagem = await channel.send({embeds: [embed], components: [row]})
           await this.client.guildDB.findOneAndUpdate({guildID: message.guild.id}, {$set: {"captcha.msg": mensagem.id}})
           return message.reply(
             `${e.Correct} | ${message.author}, o sistema foi iniciado com sucesso no canal ${channel}.`
           );
-        }
         }
       }
   
