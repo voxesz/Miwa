@@ -185,16 +185,7 @@ module.exports = class Captcha extends Command {
               .setStyle("SECONDARY")
               .setEmoji(e.Correct)
           )
-
-          if(guildDBData.captcha.msg !== "null") {
-            const canal = this.client.channels.cache.get(guildDBData.captcha.channel)
-            if(!canal) return;
-            const sexo = await canal.messages.fetch(`${guildDBData.captcha.msg}`)
-            if(!sexo) return;
-            sexo.delete()
-          }
-          const mensagem = await channel.send({embeds: [embed], components: [row]})
-          await this.client.guildDB.findOneAndUpdate({guildID: message.guild.id}, {$set: {"captcha.msg": mensagem.id}})
+          channel.send({embeds: [embed], components: [row]})
           return message.reply(
             `${e.Correct} | ${message.author}, o sistema foi iniciado com sucesso no canal ${channel}.`
           );
