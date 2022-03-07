@@ -1,10 +1,8 @@
 const { Schema, model } = require('mongoose');
 
 let clientDB = new Schema({
-	clientID: {
-		required: true,
-		type: String,
-	},
+	clientID: { type: String, required: true },
+	blacklist: { type: Array, default: [] }
 });
 
 let Client = model('Client', clientDB);

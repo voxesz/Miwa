@@ -18,6 +18,6 @@ module.exports = class Ping extends Command {
 		const stopDB = process.hrtime(startDB);
 		const pingDB = Math.round((stopDB[0] * 1e9 + stopDB[1]) / 1e6);
 
-		message.reply(`${e.World} | API Ping: **${this.client.ws.ping}ms**\n${e.MongoDB} | Database Ping: **${pingDB}ms**`);
+		message.reply(`${e.Wifi} | API Ping: **${this.client.ws.ping}ms**\n${e.World} | Database Ping: **${pingDB}ms**`);
 	}
 };

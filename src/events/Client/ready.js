@@ -7,7 +7,7 @@ module.exports = class {
 		setInterval(() => {
 			const status = [
 				{
-					name: 'Precisa de ajuda? Utilize n.help',
+					name: 'Precisa de ajuda? Utilize -help',
 				},
 				{
 					name: `Online em ${this.client.guilds.cache.size} servidores.`,
@@ -17,6 +17,6 @@ module.exports = class {
 			this.client.user.setActivity(randomStatus.name);
 		}, 25 * 1000);
 
-		console.log('🟩 | Nait iniciado com sucesso!');
+		console.log(`🟩 | ${this.client.user.username} iniciado com sucesso!`);
 	}
 };
