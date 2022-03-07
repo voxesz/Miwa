@@ -29,9 +29,7 @@ module.exports = class Captcha extends Command {
           iconURL: message.guild.iconURL({ dynamic: true }),
         })
         .setDescription(
-          `${e.Return} › Sistema de **Verificação**\n\n> ${e.Archive} | Status: **${
-            guildDBData.captcha.status == false ? `Desativado` : `Ativado`
-          }**\n> ${
+          `${e.Return} › Sistema de **Verificação**\n\n> ${
             e.Save
           } | Cargo: **${guildDBData.captcha.role == "null" ? "Nenhum cargo definido." : `<@&${guildDBData.captcha.role}>`}**\n> ${
             e.World
@@ -95,7 +93,7 @@ module.exports = class Captcha extends Command {
                 .addFields([
                   {
                     name: "Comandos:",
-                    value: `> **captcha role <cargo>** - Defina o cargo que será dado ao verificar.\n> **captcha channel <chat>** - Chat que será enviada a mensagem de verificação.\n> **captcha msg <msg>** - Mensagem que será enviada.\n> **captcha status** - Ligue ou desligue o sistema.`,
+                    value: `> **captcha role <cargo>** - Defina o cargo que será dado ao verificar.\n> **captcha set <chat>** - Envie a verificação no chat inserido.\n> **captcha msg <msg>** - Mensagem que será enviada.`,
                   },
                   {
                     name: `Placeholders:`,
@@ -150,22 +148,19 @@ module.exports = class Captcha extends Command {
         return;
       }
   
-      if (["channel", "chat", "canal"].includes(args[0].toLowerCase())) {
+      if (["channel", "definir", "canal", "set"].includes(args[0].toLowerCase())) {
         const channel =
           message.mentions.channels.first() ||
           message.guild.channels.cache.get(args[1]);
   
+        if (guildDBData.captcha.message == "null") return message.reply(`${e.Error} | ${message.author}, você precisa`)
         if (!channel) {
           return message.reply(
-            `${e.Error} | ${message.author}, você precisa inserir um canal para ser definido.`
+            `${e.Error} | ${message.author}, você precisa inserir um canal.`
           );
         } else if (!channel.type === "text") {
           return message.reply(
             `${e.Error} | ${message.author}, você deve inserir um canal de texto.`
-          );
-        } else if (guildDBData.captcha.channel == channel.id) {
-          return message.reply(
-            `${e.Error} | ${message.author}, o canal inserido já está definido atualmente.`
           );
         } else {
           if (guildDBData) {
@@ -177,6 +172,11 @@ module.exports = class Captcha extends Command {
               "captcha.channel": channel.id,
             });
           }
+          const embed = new Embed(message.author)
+          .setAuthor({name: `${message.guild.name} - Verificação`, iconURL: message.guild.iconURL()})
+          .setDescription(`${guildDBData.captcha.message.replace("[role]", `<#${guildDBData.captcha.role}>`)}`)
+          .setFooter({text: `Mensagem configurada pela Equipe do ${message.guild.name}.`, iconURL: message.guild.iconURL()})
+          await channel.send({embeds: [embed]})
           return message.reply(
             `${e.Correct} | ${message.author}, o canal ${channel} foi adicionado com sucesso ao sistema.`
           );
@@ -213,31 +213,6 @@ module.exports = class Captcha extends Command {
           );
         }
         return;
-      }
-  
-      if (["stats", "status", "on", "off"].includes(args[0].toLowerCase())) {
-        if (guildDBData.captcha.status == false) {
-          if (guildDBData.captcha.message == "null") {
-            return message.reply(
-              `${e.Error} | ${message.author}, você precisa definir a mensagem antes de ligar o sistema.`
-            );
-          } else {
-            guildDBData.captcha.status = true;
-            await guildDBData.save();
-  
-            return message.reply(
-              `${e.Correct} | ${message.author}, sistema ativado com sucesso.`
-            );
-          }
-        }
-        if (guildDBData.captcha.status == true) {
-          guildDBData.captcha.status = false;
-          await guildDBData.save();
-  
-          return message.reply(
-            `${e.Correct} | ${message.author}, sistema desativado com sucesso.`
-          );
-        }
       }
   }
 };
