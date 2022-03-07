@@ -21,6 +21,12 @@ let guildDB = new Schema({
     status: { type: Boolean, default: false },
     type: { type: String, default: "msg" },
   },
+  captcha: {
+    channel: { type: String, default: "null" },
+    message: { type: String, default: "null" },
+    status: { type: Boolean, default: false },
+    role: { type: String, default: "null" }
+  },
   autorole: {
     roles: { type: Array, default: [] },
     status: { type: Boolean, default: false },

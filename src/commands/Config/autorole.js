@@ -140,7 +140,7 @@ module.exports = class Autorole extends Command {
         } else {
           await this.client.guildDB.create({
             guildID: message.guild.id,
-            "autorole.role": role.id,
+            "autorole.roles": role.id,
           });
         }
       }

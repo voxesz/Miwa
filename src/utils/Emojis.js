@@ -33,5 +33,6 @@ module.exports = {
     MemberRemove: "<:MemberRemove:949440203326636114>",
     MemberAdd: "<:MemberAdd:949440203410538556>",
     Trash: "<:Trash:949440202827530251>",
-    Flag: "<:Flag:949440201426604134>"
+    Flag: "<:Flag:949440201426604134>",
+    Return: "<:Return:949440204140326912>"
 }
