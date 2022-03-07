@@ -153,7 +153,7 @@ module.exports = class Captcha extends Command {
           message.mentions.channels.first() ||
           message.guild.channels.cache.get(args[1]);
   
-        if (guildDBData.captcha.message == "null") return message.reply(`${e.Error} | ${message.author}, você precisa`)
+        if (guildDBData.captcha.message == "null") return message.reply(`${e.Error} | ${message.author}, você precisa definir a mensagem antes de iniciar o sistema.`)
         if (!channel) {
           return message.reply(
             `${e.Error} | ${message.author}, você precisa inserir um canal.`
@@ -174,9 +174,17 @@ module.exports = class Captcha extends Command {
           }
           const embed = new Embed(message.author)
           .setAuthor({name: `${message.guild.name} - Verificação`, iconURL: message.guild.iconURL()})
-          .setDescription(`${guildDBData.captcha.message.replace("[role]", `<#${guildDBData.captcha.role}>`)}`)
+          .setDescription(`${guildDBData.captcha.message.replace("[role]", `<@&${guildDBData.captcha.role}>`)}`)
           .setFooter({text: `Mensagem configurada pela Equipe do ${message.guild.name}.`, iconURL: message.guild.iconURL()})
-          await channel.send({embeds: [embed]})
+
+          const row = new MessageActionRow()
+          .addComponents(
+              new MessageButton()
+              .setCustomId('captcha')
+              .setLabel('Verificar')
+              .setStyle("SECONDARY")
+          )
+          await channel.send({embeds: [embed], components: [row]})
           return message.reply(
             `${e.Correct} | ${message.author}, o canal ${channel} foi adicionado com sucesso ao sistema.`
           );
