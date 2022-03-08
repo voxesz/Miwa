@@ -18,40 +18,22 @@ module.exports = class Clear extends Command {
   }
 
   async execute({ message, args }) {
-    if (!args[0])
-      return message.reply(
-        `${e.Error} | ${message.author}, você precisa inserir quantas mensagens deseja apagar.`
-      );
 
-    const amount = parseInt(args[0]);
+        const deleteCount = parseInt(args[0], 10);
+        if (!deleteCount || deleteCount < 1 || deleteCount > 99)
+          return message.reply(`${e.Error} | ${message.author}, você deve inserir um número de **1 a 99**.`);
 
-    if (amount > 1000 || amount < 2)
-      return message.reply(
-        `${e.Error} | ${message.author}, a quantia deve ser um número de **2** à **1000**.`
-      );
-
-    const size = Math.ceil(amount / 100);
-
-    if (size === 1) {
-      let messages = await message.channel.messages.fetch({ limit: amount });
-
-      const deleted = await message.channel.bulkDelete(messages, true);
-    } else {
-      let length = 0;
-
-      for (let i = 0; i < size; i++) {
-        let messages = await message.channel.messages.fetch({
-          limit: i === size.length - 1 ? amount - (pages - 1) * 100 : 100,
+        let fetched = await message.channel.messages.fetch({
+          limit: deleteCount + 1,
         });
 
-        messages = messages.array().filter((x) => x.pinned === false);
 
-        const deleted = await message.channel.bulkDelete(messages, true);
+        message.channel.bulkDelete(fetched);
+        message.channel.send(`${e.Correct} | ${message.author}, você deletou com sucesso **${deleteCount} mensagens**!`).then((msg) => {
+            setTimeout(() => {
+              msg.delete();
+            }, 5000);
+          });
 
-        length += deleted.size;
-
-        if (deleted.size < messages.length) continue;
-      }
-    }
   }
 };
