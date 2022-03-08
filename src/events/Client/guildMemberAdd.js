@@ -78,8 +78,8 @@ module.exports = class {
         ctx.textAlign = "left";
         ctx.font = '40px "Bold"';
         ctx.fillStyle = "#FFFFFF";
-        await this.client.renderEmoji(ctx, member.user.username.length >= 10 ? member.user.username.slice(0, 10) + ("...") : message.user.username, 301, 183);
-        const w = ctx.measureText(member.user.username.length >= 10 ? member.user.username.slice(0, 10) + ("...") : message.user.username).width;
+        await this.client.renderEmoji(ctx, member.user.username.length >= 10 ? member.user.username.slice(0, 10) + ("...") : member.user.username, 301, 183);
+        const w = ctx.measureText(member.user.username.length >= 10 ? member.user.username.slice(0, 10) + ("...") : member.user.username).width;
 
         ctx.font = '24px "Regular"';
         ctx.fillStyle = "#9E9E9E";
