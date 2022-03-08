@@ -21,11 +21,11 @@ module.exports = class Collaborators extends Command {
         .addFields([
             {
                 name: `${e.Heart} › Colaboradores:`,
-                value: `> **Niskii** ( Niskii#6694 )\n> **Jonas** ( yJon4s_#4747 )\n> **Taiga** ( Taiga Aisaka#9759 )\n> **Splinter** ( zSpl1nterUS_#6455 )`
+                value: `> **Niskii** - ( Niskii#6694 )\n> **Jonas** - ( yJon4s_#4747 )\n> **Taiga** - ( Taiga Aisaka#9759 )\n> **Splinter** - ( zSpl1nterUS_#6455 )`
             },
             {
                 name: `${e.Like} › Parcerias:`,
-                value: `> **[Zafriel](https://discord.gg/vsYPVtg4mM)**`
+                value: `> **[Zafriel](https://discord.gg/vsYPVtg4mM)** ( BOT )`
             }
         ])
 
