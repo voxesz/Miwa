@@ -22,7 +22,7 @@ module.exports = class Shell extends Command {
 
 		exec(args.join(' '), async (_err, stdout, stderr) => {
 			if (!stdout && !stderr) {
-				message.reply(`Erro fds, n sei oq colocar aq`);
+				message.reply(`Erro fds, n sei oq colocar`);
 				return;
 			}
 
