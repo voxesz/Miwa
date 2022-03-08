@@ -60,6 +60,11 @@ module.exports = class Botinfo extends Command {
         .setURL(`https://discord.gg/Gfbd7kBGmw`)
         .setLabel("Suporte")
         .setEmoji(e.Help)
+        .setStyle("LINK"),
+      new MessageButton()
+        .setURL(`https://top.gg/bot/924840595959218196`)
+        .setLabel("Vote em mim")
+        .setEmoji(e.Heart)
         .setStyle("LINK")
     );
 
