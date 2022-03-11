@@ -9,14 +9,17 @@
   "author": "vxk 🖤#1834",
   "license": "ISC",
   "dependencies": {
+    "@iamtraction/google-translate": "^1.1.2",
     "canvas": "^2.9.0",
     "child_process": "^1.0.2",
     "discord.js": "^13.6.0",
     "dotenv": "^16.0.0",
+    "glob": "^7.2.0",
     "klaw": "^4.0.1",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
     "mongoose": "^6.2.4",
-    "node-canvas-with-twemoji-and-discord-emoji": "^1.2.1"
+    "node-canvas-with-twemoji-and-discord-emoji": "^1.2.1",
+    "vulkava": "^1.1.2"
   }
 }

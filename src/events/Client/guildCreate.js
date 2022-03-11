@@ -13,19 +13,19 @@ module.exports = class guildCreate {
     });
 
     const embed = new Embed(this.client.user)
-      .setTitle(`${e.Archive} ${this.client.user.username} Adicionado!`)
+      .setTitle(`${e.Welcome} › ${this.client.user.username} Adicionada!`)
       .setThumbnail(guild.iconURL({format: "jpeg", size: 2048}))
       .addFields(
         {
-          name: `${e.World} Nome:`,
+          name: `${e.Earth} | Nome:`,
           value: `> ${guild.name}`,
         },
         {
-          name: `${e.Archives} ID do Servidor`,
+          name: `${e.ID} | ID do Servidor:`,
           value: `> ${guild.id}`,
         },
         {
-          name: `${e.Member} Total de Usuários`,
+          name: `${e.User} | Total de Usuários:`,
           value: `> ${guild.memberCount}`,
         }
       );

@@ -19,36 +19,41 @@ module.exports = class Daily extends Command {
       _id: message.author.id,
     });
 
+    if (!userDBData)
+      await this.client.userDBData.create({
+        _id: message.author.id,
+      });
+
     let coins = Math.floor(Math.random() * 3000);
     const xp = Math.floor(Math.random() * 100);
-    let daily = userDBData.daily;
+    let daily = userDBData.cooldowns.daily;
     let time = 8.64e7 - (Date.now() - daily);
 
     if (daily !== null && 8.64e7 - (Date.now() - daily) > 0) {
       return message.reply(
-        `${e.Error} | ${
-          message.author
-        }, você precisa aguardar **${this.formatTime(
+        `${e.Time} › Você **precisa** aguardar **${this.formatTime(
           this.convertMilliseconds(time)
-        )}** para resgatar seu premio novamente.`
+        )}** para resgatar seu **premio** novamente.`
       );
     } else {
-      message.reply(`${e.Correct} | ${message.author}, você resgatou seu premio diário e ganhou:\n> ${e.Money} | **${coins.toLocaleString()} gems**\n> ${e.Thunder} | **${xp} de experiência**.`
+      message.reply(
+        `${e.Success} › você **resgatou** seu premio **diário** e ganhou:\n> ${
+          e.Money
+        } | **${coins.toLocaleString()} gems**\n> ${
+          e.Thunder
+        } | **${xp} de experiência**.`
       );
-
-      if (userDBData) {
-        userDBData.daily = Date.now();
-        userDBData.coins = userDBData.coins + coins;
-        userDBData.exp.xp = userDBData.exp.xp + xp;
-        await userDBData.save();
-      } else {
-        await this.client.userDBData.create({
-          _id: message.author.id,
-          daily: Date.now(),
-          coins: coins,
-          xp: xp,
-        });
-      }
+      userDBData.cooldowns.daily = Date.now();
+      userDBData.coins = userDBData.coins + coins;
+      userDBData.exp.xp = userDBData.exp.xp + xp;
+      await userDBData.save();
+    }
+    let nextLevel = 500 * level;
+    if (userDBData.exp.xp >= nextLevel) {
+      userDBData.exp.level = userDBData.exp.level + 1
+      userDBData.exp.xp = userDBData.exp.xp - nextLevel;
+      await userDBData.save();
+      await message.react(e.LevelUP);
     }
   }
 

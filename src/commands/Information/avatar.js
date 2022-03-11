@@ -23,7 +23,7 @@ module.exports = class Avatar extends Command {
 
 		const embed = new Embed(message.author)
 			.setAuthor({ name: user.username, iconURL: user.avatarURL({ dynamic: true }) })
-			.setDescription(`Clique no **botão** abaixo para **baixar** a foto do usuário.`)
+			.setDescription(`${e.Image} › Clique no **botão** abaixo para **baixar** a foto do usuário.`)
 			.setImage(avatar)
 
 		const row = new MessageActionRow()
@@ -31,7 +31,7 @@ module.exports = class Avatar extends Command {
 				new MessageButton()
 					.setURL(`${avatar}`)
 					.setLabel('')
-					.setEmoji(e.Save)
+					.setEmoji(e.Download)
 					.setStyle("LINK")
 			);
 

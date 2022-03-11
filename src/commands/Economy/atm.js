@@ -19,7 +19,7 @@ module.exports = class Atm extends Command {
 
 		const user = await this.client.userDB.findOne({ _id: USER.id });
 
-		return message.reply(`${e.Money} | ${USER.id == message.author.id ? "**Você** possui" : `O(a) **${USER.tag}** possui`} atualmente **${!user ? "0" : user.coins.toLocaleString()} gems**.`);
+		return message.reply(`${e.Money} › ${USER.id == message.author.id ? "**Você** possui" : `O(a) **${USER.tag}** possui`} atualmente **${!user ? "0" : user.coins.toLocaleString()} gems**.`);
 
 	}
 };

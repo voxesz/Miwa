@@ -18,6 +18,7 @@ module.exports = class Botinfo extends Command {
   async execute({ message, args }) {
     moment.locale("pt-BR");
 
+    const users = this.client.guilds.cache.map((g) => g.memberCount).reduce((a, g) => a + g).toLocaleString();
     const uptime = moment
       .duration(this.client.uptime)
       .format("d[d] h[h] m[m] s[s]");
@@ -31,20 +32,20 @@ module.exports = class Botinfo extends Command {
       .setThumbnail(this.client.user.avatarURL({ size: 2048 }))
       .addFields([
         {
-          name: `Informações Básicas:`,
-          value: `${
-            e.Dev
-          } | Criador: **[vxk 🖤#1834](https://github.com/VCScript)**\n${
-            e.Member
-          } | Usuários: **${this.client.users.cache.size.toLocaleString()}**\n${
-            e.World
-          } | Guildas: **${this.client.guilds.cache.size}**\n${
-            e.Archives
+          name: `${e.List} › Informações Básicas:`,
+          value: `> ${
+            e.Developer
+          } | Criador: **[vxk 🖤#1834](https://github.com/VCScript)**\n> ${
+            e.User
+          } | Usuários: **${users}**\n> ${
+            e.Earth
+          } | Guildas: **${this.client.guilds.cache.size}**\n> ${
+            e.Command
           } | Comandos: **${this.client.commands.size}**`,
         },
         {
-          name: `Informações Técnicas:`,
-          value: `${e.Config} | Tempo Online: **${uptime}**\n${e.Archive} | RAM: **${ram}MB**\n${e.Discord} | Livraria: **[Djs](https://discord.js.org/#/) ( v${version} )**\n${e.NodeJS} | NodeJS: **[${process.version}](https://nodejs.org/en/)**`,
+          name: `${e.Config} › Informações Técnicas:`,
+          value: `> ${e.Time} | Tempo Online: **${uptime}**\n> ${e.Memory} | Memória RAM: **${ram}MB**\n> ${e.Programming} | Livraria: **[Djs](https://discord.js.org/#/) ( v${version} )**\n> ${e.JavaScript} | NodeJS: **[${process.version}](https://nodejs.org/en/)**`,
         },
       ]);
 
@@ -54,17 +55,17 @@ module.exports = class Botinfo extends Command {
           `https://discord.com/oauth2/authorize?client_id=924840595959218196&permissions=534722768118&scope=bot`
         )
         .setLabel("Me adicione")
-        .setEmoji(e.Link)
+        .setEmoji(e.Add)
         .setStyle("LINK"),
       new MessageButton()
         .setURL(`https://discord.gg/Gfbd7kBGmw`)
         .setLabel("Suporte")
-        .setEmoji(e.Help)
+        .setEmoji(e.Link)
         .setStyle("LINK"),
       new MessageButton()
         .setURL(`https://top.gg/bot/924840595959218196`)
         .setLabel("Vote em mim")
-        .setEmoji(e.Heart)
+        .setEmoji(e.Love)
         .setStyle("LINK")
     );
 

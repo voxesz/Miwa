@@ -23,6 +23,7 @@ module.exports = class MiwaClient extends Client {
     this.sendLogs = this.commandLogs;
 
     this.developers = ["689265428769669155"];
+    this.maintenance = []
   }
 
   load(commandPath, commandName) {
@@ -58,6 +59,14 @@ module.exports = class MiwaClient extends Client {
       client.on(eventName, (...args) => event.execute(...args));
       delete require.cache[require.resolve(`../events/Client/${file}`)];
     });
+    
+    const musicFiles = await readdir('./src/events/Music');
+		musicFiles.forEach((file) => {
+			const eventName = file.split('.')[0];
+			const event = new (require(`../events/Music/${file}`))(client);
+			client.music.on(eventName, (...args) => event.execute(...args));
+			delete require.cache[require.resolve(`../events/Music/${file}`)];
+		});
   }
 
   async applyLineBreaks(string, maxCharLengthPerLine) {
@@ -73,18 +82,31 @@ module.exports = class MiwaClient extends Client {
     return chunks.map((c) => c.trim()).join("\n");
   }
 
-  async convertAbbrev(num) {
-    if (!num) return "0";
+  async convertMilliseconds(ms) {
+    const seconds = ~~(ms / 1000);
+    const minutes = ~~(seconds / 60);
+    const hours = ~~(minutes / 60);
+    const days = ~~(hours / 24);
+  
+    return {
+      days,
+      hours: hours % 24,
+      minutes: minutes % 60,
+      seconds: seconds % 60,
+    };
+  }
 
+  async convertAbbrev(num) {
     const number = parseFloat(num.substr(0, num.length - 1));
     const unit = num.substr(-1);
-    const zeros = { K: 1e3, k: 1e3, M: 1e6, m: 1e6 };
+    const zeros = {
+      k: 1e3,
+      M: 1e6,
+      G: 1e9,
+      T: 1e12,
+    };
 
-    if (!zeros[unit]) return parseFloat(num);
-
-    num = number * zeros[unit];
-
-    return num;
+    return !zeros[unit] ? parseFloat(num) : number * zeros[unit];
   }
 
   async renderEmoji(ctx, message, x, y) {

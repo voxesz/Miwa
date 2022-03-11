@@ -18,10 +18,10 @@ module.exports = class Prefix extends Command {
 
         const guildDBData = await this.client.guildDB.findOne({ guildID: message.guild.id });
 
-		if(!args[0]) return message.reply(`${e.Right} | ${message.author}, meu prefixo atual é **\`${prefix}\`**\n> ${e.Help} | Para alterar meu prefixo, utilize **${prefix}prefix <prefixo>**`);
+		if(!args[0]) return message.reply(`${e.Config} › Meu **prefixo** atual nesta guilda é **${prefix}**\n> ${e.Tip} | Para **altera-lo**, utilize o comando **${prefix}prefix <prefixo>**`);
 
 		if(args[0].length > 3) {
-			return message.reply(`${e.Error} | ${message.author}, o prefixo deve ter no máximo **3 caracteres**.`);
+			return message.reply(`${e.Size} › O **prefixo** deve ter no máximo **3 caracteres**.`);
 		}
 
 		if (guildDBData) {
@@ -35,7 +35,7 @@ module.exports = class Prefix extends Command {
 			});
 		}
 
-		message.reply(`${e.Correct} | ${message.author}, meu prefixo nesse servidor foi alterado para **\`${args[0]}\`**`);
+		message.reply(`${e.Success} › Meu **prefixo** nesta guilda foi **alterado** para **${args[0]}**`);
 		
 	}
 };

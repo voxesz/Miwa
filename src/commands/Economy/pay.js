@@ -23,36 +23,31 @@ module.exports = class Pay extends Command {
 
     if (!USER)
       return message.reply(
-        `${e.Error} | ${message.author}, você precisa inserir o membro que deseja fazer a transação.`
+        `${e.InsertError} › Você **precisa** inserir o **membro** que deseja fazer a **transação**.`
+      );
+
+      if (USER.id === message.author.id)
+      return message.reply(
+        `${e.Error} › Você **não** pode **enviar** dinheiro a si **mesmo**.`
       );
     
-      if(USER.bot) return message.reply(`${e.Error} | ${message.author}, você não pode enviar dinheiro a um Bot.`)
+      if(USER.bot) return message.reply(`${e.Bot} › Você **não** pode **enviar** dinheiro a um **Bot**.`)
 
     if (!args[1])
       return message.reply(
-        `${e.Error} | ${message.author}, você precisa inserir a quantia que deseja enviar.`
+        `${e.InsertError} › Você **precisa** inserir a **quantia** que deseja **enviar**.`
       );
 
     const money = await this.client.convertAbbrev(args[1]);
 
-    if (String(money) === "NaN")
+    if (isNaN(money) || money <= 0)
       return message.reply(
-        `${e.Error} | ${message.author}, você precisa inserir uma quantia válida.`
-      );
-
-    if (money <= 0)
-      return message.reply(
-        `${e.Error} | ${message.author}, a quantia enviada não pode ser igual ou menor que 0.`
-      );
-
-    if (USER.id === message.author.id)
-      return message.reply(
-        `${e.Error} | ${message.author}, você não pode enviar dinheiro para si mesmo.`
+        `${e.Size} › Você **precisa** inserir uma quantia **válida**.`
       );
 
     if (money > user.coins)
       return message.reply(
-        `${e.Error} | ${message.author}, você não possui dinheiro suficiente para realizar a transação.`
+        `${e.NoMoney} › Você **não** possui **dinheiro** suficiente para **realizar** a transação.`
       );
 
     const target = await this.client.userDB.findOne({ _id: USER.id });
@@ -62,7 +57,7 @@ module.exports = class Pay extends Command {
     const yesButton = new MessageButton()
       .setCustomId("yes")
       .setLabel("")
-      .setEmoji(e.Correct)
+      .setEmoji(e.Success)
       .setStyle("SECONDARY")
       .setDisabled(false);
 
@@ -76,11 +71,9 @@ module.exports = class Pay extends Command {
     row.addComponents([yesButton, noButton]);
 
     const msg = await message.reply({
-      content: `${e.Money} | ${
-        message.author
-      }, tem certeza que deseja realizar esta transação para o(a) **${
+      content: `${e.Warn} › Você tem **certeza** que deseja **realizar** esta transação para o(a) **${
         USER.tag
-      }**?\n> Quantia a ser enviada: **${money.toLocaleString()} coins**.`,
+      }**?\n> ${e.Money} | Quantia a ser enviada: **${money.toLocaleString()} gems**.`,
       components: [row],
     });
 
@@ -96,18 +89,16 @@ module.exports = class Pay extends Command {
     });
 
     collector.on("collect", async (x) => {
-      if (x.user.id != message.author.id)
-        return x.reply({
-          content: `${e.Error} | ${x.user}, você precisa utilizar o comando para isso.`,
-          ephemeral: true,
-        });
+      if (x.user.id !== message.author.id) {
+        return x.deferUpdate();
+      }
 
       collect = x;
 
       switch (x.customId) {
         case "yes": {
           message.reply(
-            `${e.Correct} | ${message.author}, transação realizada com sucesso.`
+            `${e.Success} › **Transação** realizada com **sucesso**.`
           );
 
           await this.client.userDB.findOneAndUpdate(
@@ -142,7 +133,7 @@ module.exports = class Pay extends Command {
           msg.delete();
 
           return message.reply(
-            `${e.Error} | ${message.author}, você cancelou a transação.`
+            `${e.Block} › Você **cancelou** a transação.`
           );
         }
       }

@@ -28,17 +28,17 @@ module.exports = class Cmd extends Command {
           iconURL: message.guild.iconURL({ dynamic: true }),
         })
         .setDescription(
-          `${e.Trash} › Sistema de **Bloquear Comandos**\n\n> ${e.Archive} | Status: **${
+          `${e.Block} › Sistema de **Bloquear Comandos**\n\n> ${e.Switch} | Status: **${
             guildDBData.cmd.status == false ? `Desativado` : `Ativado`
-          }**\n> ${e.World} | Chat: **${
+          }**\n> ${e.Chat} | Chat: **${
             guildDBData.cmd.channels.length == 0
               ? `Nenhum canal adicionado.`
               : `${guildDBData.cmd.channels.map((x) => `<#${x}>`).join(", ")}`
-          }**\n> ${e.Config} | Comandos: **${
+          }**\n> ${e.Command} | Comandos: **${
             guildDBData.cmd.cmds.length == 0
               ? "Nenhum comando adicionado."
               : `${guildDBData.cmd.cmds.map((x) => `${x}`).join(", ")}`
-          }**\n> ${e.Email} | Mensagem: \`\`\` # "${
+          }**\n> ${e.Message} | Mensagem: \n\`\`\`md\n# "${
             guildDBData.cmd.message == "null"
               ? `Nenhuma mensagem definida.`
               : guildDBData.cmd.message
@@ -51,14 +51,13 @@ module.exports = class Cmd extends Command {
         .setCustomId("left")
         .setEmoji(e.Left)
         .setStyle("SECONDARY")
-        .setDisabled(true);
 
       const right = new MessageButton()
         .setCustomId("right")
         .setEmoji(e.Right)
         .setStyle("SECONDARY");
 
-      row.setComponents(left, right);
+      row.setComponents(right);
 
       let msg = await message.reply({ embeds: [embed], components: [row] });
 
@@ -75,8 +74,7 @@ module.exports = class Cmd extends Command {
         .on("end", async (r, reason) => {
           if (reason != "time") return;
 
-          right.setDisabled(true);
-          left.setDisabled(true);
+          msg.delete()
         })
 
         .on("collect", async (r) => {
@@ -90,21 +88,19 @@ module.exports = class Cmd extends Command {
                   name: message.guild.name,
                   iconURL: message.guild.iconURL({ dynamic: true }),
                 })
-                .setDescription(`${e.Trash} › Sistema de **Bloquear Comandos**`)
+                .setDescription(`${e.Block} › Sistema de **Bloquear Comandos**`)
                 .addFields({
-                  name: "Comandos:",
+                  name: `${e.Command} | Comandos:`,
                   value: `> **cmd set <chat>** - Chats que serão permitidos o uso de comandos.\n> **cmd add <cmd>** - Comandos que serão proibidos.\n> **cmd msg <msg>** - Altere a mensagem de erro.\n> **cmd status** - Ligue ou desligue o sistema.`,
                 });
 
-              right.setDisabled(true);
-              left.setDisabled(false);
+              row.setComponents(left)
               await r.deferUpdate();
               await msg.edit({ embeds: [info], components: [row] });
               break;
             }
             case "left": {
-              right.setDisabled(false);
-              left.setDisabled(true);
+              row.setComponents(right)
               await r.deferUpdate();
               await msg.edit({ embeds: [embed], components: [row] });
               break;
@@ -117,7 +113,7 @@ module.exports = class Cmd extends Command {
     if (["add", "cmd", "command"].includes(args[0].toLowerCase())) {
       if (!args[1])
         return message.reply(
-          `${e.Error} | ${message.author}, você precisa inserir o comando que deseja adicionar ao sistema.`
+          `${e.InsertError} › Você **precisa** inserir o **comando** que deseja **adicionar** ao sistema.`
         );
 
       const command = args[1].toLowerCase();
@@ -127,7 +123,7 @@ module.exports = class Cmd extends Command {
 
       if (!cmd) {
         return message.reply(
-          `${e.Error} | ${message.author}, não encontrei o comando solicitado.`
+          `${e.FindError} › **Desculpe**, não **encontrei** o comando que você **solicitou**.`
         );
       } else {
         if (guildDBData.cmd.cmds.some((x) => x === cmd.name)) {
@@ -136,7 +132,7 @@ module.exports = class Cmd extends Command {
             { $pull: { "cmd.cmds": cmd.name } }
           );
           return message.reply(
-            `${e.Correct} | ${message.author}, o comando \`${cmd.name}\` foi removido com sucesso do sistema.`
+            `${e.Success} › O comando **${cmd.name}** foi **removido** com sucesso do **sistema**.`
           );
         } else {
           await this.client.guildDB.findOneAndUpdate(
@@ -144,7 +140,7 @@ module.exports = class Cmd extends Command {
             { $push: { "cmd.cmds": cmd.name } }
           );
           return message.reply(
-            `${e.Correct} | ${message.author}, o comando \`${cmd.name}\` foi adicionado com sucesso ao sistema.`
+            `${e.Success} › O comando **${cmd.name}** foi **adicionado** com sucesso ao **sistema**.`
           );
         }
       }
@@ -157,20 +153,21 @@ module.exports = class Cmd extends Command {
 
       if (!channel) {
         return message.reply(
-          `${e.Error} | ${message.author}, você precisa inserir um canal para ser definido.`
+          `${e.InsertError} › Você **precisa** inserir o **chat** que deseja **adicionar** ao sistema.`
         );
-      } else if (!channel.type === "text") {
+      }
+      if (channel.type !== "GUILD_TEXT") {
         return message.reply(
-          `${e.Error} | ${message.author}, você deve inserir um canal de texto.`
+          `${e.Error} › O **chat** deve ser do tipo **Texto**.`
         );
-      } else {
+      }
         if (!guildDBData.cmd.channels.includes(channel.id)) {
           await this.client.guildDB.findOneAndUpdate(
             { guildID: message.guild.id },
             { $push: { "cmd.channels": channel.id } }
           );
           return message.reply(
-            `${e.Correct} | ${message.author}, o canal ${channel} foi adicionado com sucesso ao sistema.`
+            `${e.Success} › O **chat** ${channel} foi **adicionado** com sucesso ao **sistema**.`
           );
         } else {
           await this.client.guildDB.findOneAndUpdate(
@@ -178,10 +175,9 @@ module.exports = class Cmd extends Command {
             { $pull: { "cmd.channels": channel.id } }
           );
           return message.reply(
-            `${e.Correct} | ${message.author}, o canal ${channel} foi removido com sucesso do sistema.`
+            `${e.Success} › O **chat** ${channel} foi **removido** com sucesso do **sistema**.`
           );
         }
-      }
     }
 
     if (["message", "msg"].includes(args[0].toLowerCase())) {
@@ -189,15 +185,15 @@ module.exports = class Cmd extends Command {
 
       if (!msg) {
         return message.reply(
-          `${e.Error} | ${message.author}, você precisa inserir a mensagem.`
+          `${e.InsertError} › Você **precisa** inserir a **mensagem** que deseja **adicionar** ao sistema.`
         );
       } else if (msg == guildDBData.cmd.message) {
         return message.reply(
-          `${e.Error} | ${message.author}, a mensagem inserida já está definida no momento.`
+          `${e.Warning} › A mensagem **inserida** já está **definida** no sistema.`
         );
       } else if (msg.length > 100) {
         return message.reply(
-          `${e.Error} | ${message.author}, a mensagem deve ter no máximo \`100\` caracteres.`
+          `${e.Size} › A **mensagem** deve ter no máximo **100 caracteres**.`
         );
       } else {
         if (guildDBData) {
@@ -210,7 +206,7 @@ module.exports = class Cmd extends Command {
           });
         }
         await message.reply(
-          `${e.Correct} | ${message.author}, a mensagem do sistema foi definida como: \`\`\`${msg}\`\`\``
+          `${e.Success} › Você **alterou** a mensagem do **sistema** com sucesso! \n\`\`\`ini\nResultado: "${msg}"\`\`\``
         );
       }
       return;
@@ -220,14 +216,14 @@ module.exports = class Cmd extends Command {
       if (guildDBData.cmd.status == false) {
         if (guildDBData.cmd.message == "null") {
           return message.reply(
-            `${e.Error} | ${message.author}, você precisa definir a mensagem antes de ligar o sistema.`
+            `${e.InsertError} › Você precisa **definir** a **mensagem** do sistema para **isso**.`
           );
         } else {
           guildDBData.cmd.status = true;
           await guildDBData.save();
 
           return message.reply(
-            `${e.Correct} | ${message.author}, sistema ativado com sucesso.`
+            `${e.On} › Agora o **sistema** se encontra **ligado**.`
           );
         }
       }
@@ -236,7 +232,7 @@ module.exports = class Cmd extends Command {
         await guildDBData.save();
 
         return message.reply(
-          `${e.Correct} | ${message.author}, sistema desativado com sucesso.`
+          `${e.Off} › Agora o **sistema** se encontra **desligado**.`
         );
       }
     }

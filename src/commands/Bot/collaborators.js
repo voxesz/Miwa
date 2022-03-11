@@ -9,23 +9,22 @@ module.exports = class Collaborators extends Command {
 
 		this.name = 'collaborators';
 		this.category = 'Bot';
-		this.description = 'Veja as pessoas que colaboraram no desenvolvimento da Miwa.';
-		this.aliases = ['collabs', 'contributors'];
+		this.description = 'Veja as pessoas que ajudaram no meu desenvolvimento.';
+		this.aliases = ['collab'];
 	}
 
 	async execute ({ message, args }) {
 
         const embed = new Embed(message.author)
         .setAuthor({name: this.client.user.username, iconURL: this.client.user.avatarURL()})
-        .setDescription(`Obrigado a todos que confiaram neste projeto, agradeço de coração. <3`)
         .addFields([
             {
                 name: `${e.Heart} › Colaboradores:`,
-                value: `> **Niskii**\n> **yJon4s**\n> **Taiga Aiasaka**\n> **zSplinterUS**`
+                value: `> [zSplinterUS](https://github.com/zSpl1nterUS)\n> [Niskii](https://github.com/Niskii3)\n> [yJon4s](https://github.com/yJon4ss)`
             },
             {
-                name: `${e.Like} › Parcerias:`,
-                value: `> **[Zafriel](https://discord.gg/vsYPVtg4mM)** ( BOT )`
+                name: `${e.Partners} › Parceiros:`,
+                value: `> [Zafriel](https://discord.gg/Tr4ZtYt7YM)\n> [Suki](https://discord.gg/xBe7hABxMD)\n> [Siesta](https://discord.gg/359uJGepyU)`
             }
         ])
 

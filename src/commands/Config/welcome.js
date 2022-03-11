@@ -28,17 +28,17 @@ module.exports = class Welcome extends Command {
           iconURL: message.guild.iconURL({ dynamic: true }),
         })
         .setDescription(
-          `${e.MemberAdd} › Logs de **Boas-Vindas**\n\n> ${e.Archive} | Status: **${
+          `${e.Welcome} › Logs de **Boas-Vindas**\n\n> ${e.Switch} | Status: **${
             guildDBData.welcome.status == false ? `Desativado` : `Ativado`
           }**\n> ${
-            e.Save
+            e.Folder
           } | Tipo: **${guildDBData.welcome.type.toUpperCase()}**\n> ${
-            e.World
+            e.Chat
           } | Chat: **${
             guildDBData.welcome.channel == "null"
               ? `Nenhum canal definido.`
               : `<#${guildDBData.welcome.channel}>`
-          }**\n> ${e.Email} | Mensagem: \`\`\` # "${
+          }**\n> ${e.Message} | Mensagem: \n\`\`\`md\n# "${
             guildDBData.welcome.message == "null"
               ? `Nenhuma mensagem definida.`
               : guildDBData.welcome.message
@@ -51,14 +51,13 @@ module.exports = class Welcome extends Command {
         .setCustomId("left")
         .setEmoji(e.Left)
         .setStyle("SECONDARY")
-        .setDisabled(true);
 
       const right = new MessageButton()
         .setCustomId("right")
         .setEmoji(e.Right)
         .setStyle("SECONDARY");
 
-      row.setComponents(left, right);
+      row.setComponents(right);
 
       let msg = await message.reply({ embeds: [embed], components: [row] });
 
@@ -75,8 +74,7 @@ module.exports = class Welcome extends Command {
         .on("end", async (r, reason) => {
           if (reason != "time") return;
 
-          right.setDisabled(true);
-          left.setDisabled(true);
+          msg.delete()
         })
 
         .on("collect", async (r) => {
@@ -90,27 +88,25 @@ module.exports = class Welcome extends Command {
                   name: message.guild.name,
                   iconURL: message.guild.iconURL({ dynamic: true }),
                 })
-                .setDescription(`${e.MemberAdd} › Logs de Boas-Vindas`)
+                .setDescription(`${e.Welcome} › Logs de **Boas-Vindas**`)
                 .addFields([
                   {
-                    name: "Comandos:",
+                    name: `${e.Command} | Comandos:`,
                     value: `> **welcome type <img/msg>** - Defina se as boas-vindas serão em imagem ou mensagem.\n> **welcome channel <chat>** - Chat que será enviada a mensagem de boas vindas.\n> **welcome msg <msg>** - Mensagem que será enviada.\n> **welcome status** - Ligue ou desligue o sistema.`,
                   },
                   {
-                    name: `Placeholders:`,
+                    name: `${e.Image} | Placeholders:`,
                     value: `> **[user]** - Menciona o usuário. **(Apenas em tipo MSG)**\n> **[name]** - Mostra o nome do usuário\n> **[tag]** - Mostra o nome junto com a hashtag.\n> **[guild]** - Mostra o nome do servidor.\n> **[members]** - Mostra o total de membros do servidor.`,
                   },
                 ]);
 
-              right.setDisabled(true);
-              left.setDisabled(false);
+              row.setComponents(left);
               await r.deferUpdate();
               await msg.edit({ embeds: [info], components: [row] });
               break;
             }
             case "left": {
-              right.setDisabled(false);
-              left.setDisabled(true);
+              row.setComponents(right);
               await r.deferUpdate();
               await msg.edit({ embeds: [embed], components: [row] });
               break;
@@ -123,11 +119,11 @@ module.exports = class Welcome extends Command {
     if (["type", "tipo"].includes(args[0].toLowerCase())) {
       if (!["img", "msg"].includes(args[1].toLowerCase()))
         return message.reply(
-          `${e.Error} | ${message.author}, os tipos de boas-vindas disponíveis são:\n> Img | Msg`
+          `${e.Folder} › Os **tipos** de boas-vindas **disponíveis** são:\n> **IMG** | **MSG**`
         );
       if (guildDBData.welcome.type == args[1].toLowerCase())
         return message.reply(
-          `${e.Error} | ${message.author}, esse tipo já está definido no momento.`
+          `${e.Warning} › Este tipo **já** está **definido** no momento.`
         );
 
       if (guildDBData) {
@@ -140,9 +136,7 @@ module.exports = class Welcome extends Command {
         });
       }
       return message.reply(
-        `${e.Correct} | ${
-          message.author
-        }, você definiu o tipo de boas-vindas como **${args[1].toUpperCase()}**.`
+        `${e.Success} › Você **definiu** o **tipo** de boas-vindas como **${args[1].toUpperCase()}**.`
       );
     }
 
@@ -153,17 +147,19 @@ module.exports = class Welcome extends Command {
 
       if (!channel) {
         return message.reply(
-          `${e.Error} | ${message.author}, você precisa inserir um canal para ser definido.`
+          `${e.InsertError} › Você **precisa** inserir o **chat** que deseja **adicionar** ao sistema.`
         );
-      } else if (!channel.type === "text") {
+      }
+      if (channel.type !== "GUILD_TEXT") {
         return message.reply(
-          `${e.Error} | ${message.author}, você deve inserir um canal de texto.`
+          `${e.Error} › O **chat** deve ser do tipo **Texto**.`
         );
-      } else if (guildDBData.welcome.channel == channel.id) {
+      }
+      if (guildDBData.welcome.channel == channel.id) {
         return message.reply(
-          `${e.Error} | ${message.author}, o canal inserido já está definido atualmente.`
+          `${e.Warning} › O chat **inserido** já está **adicionado** ao sistema.`
         );
-      } else {
+      }
         if (guildDBData) {
           guildDBData.welcome.channel = channel.id;
           await guildDBData.save();
@@ -174,9 +170,8 @@ module.exports = class Welcome extends Command {
           });
         }
         return message.reply(
-          `${e.Correct} | ${message.author}, o canal ${channel} foi adicionado com sucesso ao sistema.`
+          `${e.Success} › O **chat** ${channel} foi **adicionado** com sucesso ao **sistema**.`
         );
-      }
     }
 
     if (["message", "msg"].includes(args[0].toLowerCase())) {
@@ -184,15 +179,15 @@ module.exports = class Welcome extends Command {
 
       if (!msg) {
         return message.reply(
-          `${e.Error} | ${message.author}, você precisa inserir a mensagem.`
+          `${e.InsertError} › Você **precisa** inserir a **mensagem** que deseja **adicionar** ao sistema.`
         );
       } else if (msg == guildDBData.welcome.message) {
         return message.reply(
-          `${e.Error} | ${message.author}, a mensagem inserida já está definida no momento.`
+          `${e.Warning} › A mensagem **inserida** já está **definida** no sistema.`
         );
       } else if (msg.length > 300) {
         return message.reply(
-          `${e.Error} | ${message.author}, a mensagem deve ter no máximo \`300\` caracteres.`
+          `${e.Size} › A **mensagem** deve ter no máximo **300 caracteres**.`
         );
       } else {
         if (guildDBData) {
@@ -205,7 +200,7 @@ module.exports = class Welcome extends Command {
           });
         }
         await message.reply(
-          `${e.Correct} | ${message.author}, a mensagem do sistema foi definida como: \`\`\`${msg}\`\`\``
+          `${e.Success} › Você **alterou** a mensagem do **sistema** com sucesso! \n\`\`\`ini\nResultado: "${msg}"\`\`\``
         );
       }
       return;
@@ -215,14 +210,14 @@ module.exports = class Welcome extends Command {
       if (guildDBData.welcome.status == false) {
         if (guildDBData.welcome.message == "null") {
           return message.reply(
-            `${e.Error} | ${message.author}, você precisa definir a mensagem antes de ligar o sistema.`
+            `${e.InsertError} › Você precisa **definir** a **mensagem** do sistema para **isso**.`
           );
         } else {
           guildDBData.welcome.status = true;
           await guildDBData.save();
 
           return message.reply(
-            `${e.Correct} | ${message.author}, sistema ativado com sucesso.`
+            `${e.On} › Agora o **sistema** se encontra **ligado**.`
           );
         }
       }
@@ -231,7 +226,7 @@ module.exports = class Welcome extends Command {
         await guildDBData.save();
 
         return message.reply(
-          `${e.Correct} | ${message.author}, sistema desativado com sucesso.`
+          `${e.Off} › Agora o **sistema** se encontra **desligado**.`
         );
       }
     }

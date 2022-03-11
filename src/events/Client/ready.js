@@ -4,14 +4,18 @@ module.exports = class {
 	}
 
 	async execute () {
+		this.client.music.start(this.client.user.id);
 		setInterval(() => {
 			const status = [
 				{
-					name: 'Precisa de ajuda? Utilize -help',
+					name: 'Need help? Use -help | @Miwa',
 				},
 				{
-					name: `Online em ${this.client.guilds.cache.size} servidores.`,
+					name: `Online in ${this.client.guilds.cache.size} guilds. | @Miwa`,
 				},
+				{
+					name: `Pray for Ukraine | @Miwa`
+				}
 			];
 			let randomStatus = status[Math.floor(Math.random() * status.length)];
 			this.client.user.setActivity(randomStatus.name);

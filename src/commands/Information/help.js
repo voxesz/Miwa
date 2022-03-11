@@ -38,13 +38,11 @@ module.exports = class Help extends Command {
           .filter((x) => x.category === value)
           .sort((a, b) => a.name.localeCompare(b.name))
           .map((f) => `**${f.name}**`)
-          .join(" | "),
+          .join("\n> "),
       });
     }
 
-    const AJUDA = new Embed(message.author).setTitle(
-      `${e.Help} | Central de Ajuda`
-    );
+    const AJUDA = new Embed(message.author).setThumbnail(this.client.user.avatarURL({format: "jpeg", size: 2048})).setAuthor({name: message.guild.name, iconURL: message.guild.iconURL()});
 
     if (!args[0]) return this.menu({ menuOptions, message });
 
@@ -55,20 +53,17 @@ module.exports = class Help extends Command {
 
     if (!command) {
       return message.reply(
-        `${e.Error} | ${message.author}, não encontrei o comando solicitado.`
+        `${e.FindError} › **Desculpe**, não **encontrei** o comando **solicitado**.`
       );
     }
 
-    AJUDA.addFields({
-      name: `Informações:`,
-      value: `> Comando: **${command.name}**\n> Alternativas: **${
-        !command.aliases.length
-          ? `Sem alternativas.`
-          : command.aliases.join(", ")
-      }**\n> Descrição: **${
-        !command.description.length ? `Sem descrição.` : command.description
-      }**`,
-    });
+    AJUDA.setDescription(`${e.Information} › Central de **Ajuda**\n\n> ${e.Command} | Comando: **${command.name}**\n> ${e.Message} | Descrição: **${
+      !command.description.length ? `Sem descrição.` : command.description
+    }**\n> ${e.Config} | Alternativas: **${
+      !command.aliases.length
+        ? `Sem alternativas.`
+        : command.aliases.join(", ")
+    }**`)
 
     await message.reply({ embeds: [AJUDA] });
   }
@@ -107,7 +102,7 @@ module.exports = class Help extends Command {
             label: option.label ? option.label : option.value,
             description: `Comandos com informações úteis.`,
             value: option.value,
-            emoji: e.Help,
+            emoji: e.Information,
           });
           break;
         }
@@ -125,7 +120,25 @@ module.exports = class Help extends Command {
             label: option.label ? option.label : option.value,
             description: `Comandos para ser utilizados pela equipe do servidor.`,
             value: option.value,
-            emoji: e.Moon,
+            emoji: e.Crown,
+          });
+          break;
+        }
+        case "Music": {
+          menu.addOptions({
+            label: option.label ? option.label : option.value,
+            description: `Utilize para ouvir música no Bot.`,
+            value: option.value,
+            emoji: e.Music,
+          });
+          break;
+        }
+        case "Utils": {
+          menu.addOptions({
+            label: option.label ? option.label : option.value,
+            description: `Comandos úteis sem categoria especifica.`,
+            value: option.value,
+            emoji: e.Earth,
           });
           break;
         }
@@ -136,10 +149,11 @@ module.exports = class Help extends Command {
       guildID: message.guild.id,
     });
 
-    const EMBED = new Embed(message.author).setTitle(
-        `${e.Help} | Central de Ajuda`
+    const EMBED = new Embed(message.author)
+    .setThumbnail(this.client.user.avatarURL({format: "jpeg", size: 2048})).setTitle(
+      `${e.Information} › Central de Ajuda`
       )
-      .setDescription(`Olá ${message.author}! Está precisando de ajuda? Selecione no menu abaixo a categoria que deseja ver meus comandos.\n\nEu possuo no momento **${this.client.commands.size} comandos** para seu uso.\nCaso tenha duvida sobre algum, utilize **${server.prefix}help <comando>**.`);
+      .setDescription(`**Olá** ${message.author}! ${e.Hand}\nEstá precisando de **ajuda**? Selecione no **menu** abaixo a **categoria** que deseja ver meus **comandos**.\n\nEu **possuo** no momento **${this.client.commands.size} comandos** para seu uso.\nCaso tenha **duvida** sobre algum, utilize **${server.prefix}help <comando>**.`);
 
     row.setComponents(menu);
 
@@ -160,7 +174,7 @@ module.exports = class Help extends Command {
     collector.on("collect", async (r) => {
       if (r.user.id !== message.author.id) {
         return r.reply({
-          content: `${e.Error} | ${r.user}, você precisa utilizar o comando para isto.`,
+          content: `${e.Error} › **Desculpe**, você precisa **utilizar** o comando para **isto**.`,
           ephemeral: true,
         });
       }
@@ -168,10 +182,10 @@ module.exports = class Help extends Command {
       const menuOptionData = menuOptions.find((v) => v.value === r.values[0]);
 
       EMBED.setDescription(
-        `Categoria: **${menuOptionData.value}**`
+        `${e.Config} › Categoria: **${menuOptionData.value}**`
       );
       EMBED.fields = [];
-      EMBED.addField(`Comandos:`, menuOptionData.commandList,
+      EMBED.addField(`${e.Command} | Comandos:`, `> ${menuOptionData.commandList}`,
       );
 
       await msg.edit({ embeds: [EMBED] }, true);

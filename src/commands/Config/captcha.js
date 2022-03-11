@@ -29,19 +29,17 @@ module.exports = class Captcha extends Command {
           iconURL: message.guild.iconURL({ dynamic: true }),
         })
         .setDescription(
-          `${e.Return} › Sistema de **Verificação**\n\n> ${
-            e.Save
+          `${e.Captcha} › Sistema de **Verificação**\n\n> ${
+            e.Role
           } | Cargo: **${guildDBData.captcha.role == "null" ? "Nenhum cargo definido." : `<@&${guildDBData.captcha.role}>`}**\n> ${
-            e.World
+            e.Chat
           } | Chat: **${
             guildDBData.captcha.channel == "null"
               ? `Nenhum canal definido.`
               : `<#${guildDBData.captcha.channel}>`
-          }**\n> ${e.Email} | Mensagem: \`\`\` # "${
-            guildDBData.captcha.message == "null"
-              ? `Nenhuma mensagem definida.`
-              : guildDBData.captcha.message
-          }"\`\`\``
+          }**\n> ${e.Message} | Mensagem: \n\`\`\`md\n# "${guildDBData.captcha.message == "null"
+          ? `Nenhuma mensagem definida.`
+          : guildDBData.captcha.message}"\`\`\``
         );
 
       let row = new MessageActionRow();
@@ -50,14 +48,13 @@ module.exports = class Captcha extends Command {
         .setCustomId("left")
         .setEmoji(e.Left)
         .setStyle("SECONDARY")
-        .setDisabled(true);
 
       const right = new MessageButton()
         .setCustomId("right")
         .setEmoji(e.Right)
         .setStyle("SECONDARY");
 
-      row.setComponents(left, right);
+      row.setComponents(right);
 
       let msg = await message.reply({ embeds: [embed], components: [row] });
 
@@ -74,8 +71,7 @@ module.exports = class Captcha extends Command {
         .on("end", async (r, reason) => {
           if (reason != "time") return;
 
-          right.setDisabled(true);
-          left.setDisabled(true);
+          msg.delete()
         })
 
         .on("collect", async (r) => {
@@ -92,24 +88,22 @@ module.exports = class Captcha extends Command {
                 .setDescription(`${e.Return} › Sistema de **Verificação**`)
                 .addFields([
                   {
-                    name: "Comandos:",
+                    name: `${e.Command} | Comandos:`,
                     value: `> **captcha role <cargo>** - Defina o cargo que será dado ao verificar.\n> **captcha set <chat>** - Envie a verificação no chat inserido.\n> **captcha msg <msg>** - Mensagem que será enviada.`,
                   },
                   {
-                    name: `Placeholders:`,
+                    name: `${e.Image} | Placeholders:`,
                     value: `> **[role]** - Menciona o cargo.`,
                   },
                 ]);
 
-              right.setDisabled(true);
-              left.setDisabled(false);
+              row.setComponents(left);
               await r.deferUpdate();
               await msg.edit({ embeds: [info], components: [row] });
               break;
             }
             case "left": {
-              right.setDisabled(false);
-              left.setDisabled(true);
+              row.setComponents(right);
               await r.deferUpdate();
               await msg.edit({ embeds: [embed], components: [row] });
               break;
@@ -125,15 +119,15 @@ module.exports = class Captcha extends Command {
   
         if (!role) {
           return message.reply(
-            `${e.Error} | ${message.author}, você precisa inserir o cargo que deseja adicionar ao sistema.`
+            `${e.InsertError} › Você **precisa** inserir o **cargo** que deseja **adicionar** ao sistema.`
           );
         } else if (role.id === guildDBData.captcha.role) {
           return message.reply(
-            `${e.Error} | ${message.author}, o cargo inserido é o mesmo definido atualmente.`
+            `${e.Warning} › O cargo **inserido** já está **adicionado** ao sistema.`
           );
         } else {
           message.reply(
-            `${e.Correct} | ${message.author}, o cargo ${role} foi adicionado no sistema.`
+            `${e.Success} › O **cargo** ${role} foi **adicionado** ao sistema.`
           );
           if (guildDBData) {
             guildDBData.captcha.role = role.id;
@@ -153,16 +147,17 @@ module.exports = class Captcha extends Command {
           message.mentions.channels.first() ||
           message.guild.channels.cache.get(args[1]);
   
-        if (guildDBData.captcha.message == "null") return message.reply(`${e.Error} | ${message.author}, você precisa definir a mensagem antes de iniciar o sistema.`)
+        if (guildDBData.captcha.message == "null") return message.reply(`${e.InsertError} › Você precisa **definir** a **mensagem** do sistema para **isso**.`)
         if (!channel) {
           return message.reply(
-            `${e.Error} | ${message.author}, você precisa inserir um canal.`
+            `${e.InsertError} › Você **precisa** inserir o **chat** que deseja **adicionar** ao sistema.`
           );
-        } else if (!channel.type === "text") {
+        }
+        if (channel.type !== "GUILD_TEXT") {
           return message.reply(
-            `${e.Error} | ${message.author}, você deve inserir um canal de texto.`
+            `${e.Error} › O **chat** deve ser do tipo **Texto**.`
           );
-        } else {
+        }
           if (guildDBData) {
             guildDBData.captcha.channel = channel.id;
             await guildDBData.save();
@@ -173,8 +168,8 @@ module.exports = class Captcha extends Command {
             });
           }
           const embed = new Embed(message.author)
-          .setAuthor({name: `${message.guild.name} - Verificação`, iconURL: message.guild.iconURL()})
-          .setDescription(`${guildDBData.captcha.message.replace("[role]", `<@&${guildDBData.captcha.role}>`)}`)
+          .setAuthor({name: message.guild.name, iconURL: message.guild.iconURL()})
+          .setDescription(`${e.Captcha} › **Verificação**\n\n${guildDBData.captcha.message.replace("[role]", `<@&${guildDBData.captcha.role}>`)}`)
           .setFooter({text: `Mensagem configurada pela Equipe do ${message.guild.name}.`, iconURL: message.guild.iconURL()})
 
           const row = new MessageActionRow()
@@ -183,13 +178,12 @@ module.exports = class Captcha extends Command {
               .setCustomId('captcha')
               .setLabel('Verificar')
               .setStyle("SECONDARY")
-              .setEmoji(e.Correct)
+              .setEmoji(e.Captcha)
           )
           channel.send({embeds: [embed], components: [row]})
           return message.reply(
-            `${e.Correct} | ${message.author}, o sistema foi iniciado com sucesso no canal ${channel}.`
+            `${e.Success} › O **sistema** foi **iniciado** com sucesso no **canal** ${channel}.`
           );
-        }
       }
   
       if (["message", "msg"].includes(args[0].toLowerCase())) {
@@ -197,15 +191,15 @@ module.exports = class Captcha extends Command {
   
         if (!msg) {
           return message.reply(
-            `${e.Error} | ${message.author}, você precisa inserir a mensagem.`
+            `${e.InsertError} › Você **precisa** inserir a **mensagem** que deseja **adicionar** ao sistema.`
           );
         } else if (msg == guildDBData.captcha.message) {
           return message.reply(
-            `${e.Error} | ${message.author}, a mensagem inserida já está definida no momento.`
+            `${e.Warning} › A mensagem **inserida** já está **definida** no sistema.`
           );
         } else if (msg.length > 300) {
           return message.reply(
-            `${e.Error} | ${message.author}, a mensagem deve ter no máximo \`300\` caracteres.`
+            `${e.Size} › A **mensagem** deve ter no máximo **300 caracteres**.`
           );
         } else {
           if (guildDBData) {
@@ -218,7 +212,7 @@ module.exports = class Captcha extends Command {
             });
           }
           await message.reply(
-            `${e.Correct} | ${message.author}, a mensagem do sistema foi definida como: \`\`\`${msg}\`\`\``
+            `${e.Success} › Você **alterou** a mensagem do **sistema** com sucesso! \n\`\`\`ini\nResultado: "${msg}"\`\`\``
           );
         }
         return;

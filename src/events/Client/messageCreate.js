@@ -35,18 +35,18 @@ module.exports = class messageCreate {
             `https://discord.com/oauth2/authorize?client_id=924840595959218196&permissions=534722768118&scope=bot`
           )
           .setLabel("Me adicione")
-          .setEmoji(e.Link)
+          .setEmoji(e.Add)
           .setStyle("LINK"),
         new MessageButton()
           .setURL(
             `https://discord.gg/Gfbd7kBGmw`
           )
           .setLabel("Suporte")
-          .setEmoji(e.Help)
+          .setEmoji(e.Link)
           .setStyle("LINK")
       );
       message.reply({
-        content: `${e.Mouse} | Olá ${message.author}! Está precisando de ajuda? Utilize **${prefix}help**.`, components: [row]
+        content: `**Olá** ${message.author}! ${e.Hand}\n> Está **precisando** de ajuda? Utilize **${prefix}help**.`, components: [row]
       });
     }
 
@@ -61,6 +61,8 @@ module.exports = class messageCreate {
 
     if (message.guild) {
       let needPermissions = [];
+      const permEmbed = new Embed(this.client.user)
+      .setAuthor({name: this.client.user.username, iconURL: this.client.user.displayAvatarURL()})
 
       cmd.botPermissions.forEach((perm) => {
         if (["SPEAK", "CONNECT"].includes(perm)) {
@@ -87,13 +89,9 @@ module.exports = class messageCreate {
             needPerm.push(perms);
           }
         }
-        return message.reply(
-          `${e.Error} | ${
-            message.author
-          }, eu preciso da(s) permissão(ões) \`${needPerm.join(
-            ", "
-          ).replace("_", " ")}\` para isso.`
-        );
+        permEmbed.setDescription(`${e.Block} › Erro de **Permissão**.\n\n**Desculpe**, mas eu **preciso** da(s) permissão(ões) **${needPerm.join(", ")}** para isso.`)
+
+        return message.reply({embeds: [permEmbed]})
       }
 
       let neededPermissions = [];
@@ -114,13 +112,8 @@ module.exports = class messageCreate {
             neededPerm.push(perms);
           }
         }
-        return message.reply(
-          `${e.Error} | ${
-            message.author
-          }, você precisa da(s) permissão(ões) \`${neededPerm.join(
-            ", "
-          ).replace("_", " ")}\` para isso.`
-        );
+        permEmbed.setDescription(`${e.Block} › Erro de **Permissão**.\n\n**Desculpe**, mas você **precisa** da(s) permissão(ões) **${needPerm.join(", ")}** para isso.`)
+        return message.reply({embeds: [permEmbed]});
       }
     }
 
@@ -145,11 +138,9 @@ module.exports = class messageCreate {
         if (now < expirationTime) {
           const timeLeft = (expirationTime - now) / 1000;
           return message.reply({
-            content: `${e.Error} | ${
-              message.author
-            }, você precisa esperar **${timeLeft.toFixed(
+            content: `${e.Time} › Você **precisa** esperar **${timeLeft.toFixed(
               1
-            )} segundos** para usar este comando.`,
+            )} segundos** para usar este **comando**.`,
           });
         }
       }
@@ -162,7 +153,7 @@ module.exports = class messageCreate {
       if (!this.client.developers.some((x) => x === message.author.id)) {
         if (server.cmd.cmds.some((x) => x === cmd.name))
           return message.reply(
-            `${e.Error} | ${message.author}, este comando foi bloqueado pela Equipe do(a) **${message.guild.name}**.`
+            `${e.Block} › Este **comando** foi **bloqueado** pela Equipe do(a) **${message.guild.name}**.`
           );
         if (!server.cmd.channels.some((x) => x === message.channel.id)) {
           if (!message.member.permissions.has("ADMINISTRATOR"))
@@ -178,40 +169,27 @@ module.exports = class messageCreate {
 
       if (cliente.blacklist.some((x) => x == message.author.id)) {
         return message.reply(
-          `${e.Error} | ${message.author}, você está em minha Lista Negra, portanto não pode me usar.`
+          `${e.Block} › **Você** está em minha **Lista Negra**, portanto **não** pode me **usar**.`
         );
       }
 
       const embedError = new Embed(this.client.user)
         .setAuthor({
-          name: `${this.client.user.username} | Logs`,
+          name: this.client.user.username,
           iconURL: this.client.user.displayAvatarURL({ dynamic: true }),
         })
         .setDescription(
-          `Comando **${cmd.name}** executado no servidor **${message.guild.name}** (\`${message.guild.id}\`)`
+          `${e.List} › Logs de **Comandos**.\n\n> ${e.Command} | Comando: **${cmd.name}**> ${e.Information} | Args: **${args[0] ? args.join(" ") : "Nada."}**\n> ${e.User} | Autor: **${message.author.tag} (${message.author.id})**\n> ${e.Earth} | Servidor: **${message.guild.name} (${message.guild.id})**\n${e.Calendar} | Data: **${moment(Date.now()).format("L LT")}**`
         )
-        .addFields(
-          {
-            name: "Args",
-            value: `\`${args.join(" ")}\``,
-          },
-          {
-            name: "Usuário",
-            value: `**${message.author.tag}** (\`${message.author.id}\`)`,
-          },
-          {
-            name: "Data",
-            value: `**${moment(Date.now()).format("L LT")}**`,
-          }
-        );
       this.client.sendLogs(embedError);
 
       try {
         await cmd.execute({ message, args, prefix });
       } catch (err) {
-        await message.reply(
-          `Desculpe um erro ocorreu e o comando não foi executado corretamente. Eu peço para você reportar o erro para meus desenvolvedores e esperar que seja corrigido. Obrigado.`
-        );
+        const errorEmbed = new Embed(this.client.user)
+        .setAuthor({name: this.client.user.username, iconURL: this.client.user.avatarURL()})
+        .setDescription(`${e.Error} › Ocorreu um **Erro**!\n\n**Desculpe**, ocorreu um **erro** e o comando não foi **executado corretamente**. Peço que **relate** o BUG ao meu **desenvolvedor** através do comando **${prefix}bug (Bug)** e espero que seja **corrigido**. Obrigado por me **utilizar**!`)
+        await message.reply({embeds: [errorEmbed]});
         console.log(err);
       }
       const user = await this.client.userDB.findOne({ _id: message.author.id });

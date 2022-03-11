@@ -30,17 +30,17 @@ module.exports = class Punish extends Command {
           iconURL: message.guild.iconURL({ dynamic: true }),
         })
         .setDescription(
-          `${e.MemberRemove} › Sistema de **Punição**\n\n> ${
-            e.Archive
+          `${e.Punish} › Sistema de **Punições**\n\n> ${
+            e.ID
           } | Suas Punições: **${userDBData.bans}**\n> ${
-            e.Archives
+            e.Folder
           } | Punições da Guilda: **${guildDBData.punish.bans}**\n> ${
-            e.World
+            e.Earth
           } | Logs: **${
             guildDBData.punish.channel == "null"
               ? `Nenhum canal definido.`
               : `<#${guildDBData.punish.channel}>`
-          }**\n> ${e.Email} | Mensagem: \`\`\` # "${
+          }**\n> ${e.Message} | Mensagem: \`\`\` # "${
             guildDBData.punish.message == "null"
               ? `Embed padrão.`
               : guildDBData.punish.message
@@ -53,14 +53,13 @@ module.exports = class Punish extends Command {
         .setCustomId("left")
         .setEmoji(e.Left)
         .setStyle("SECONDARY")
-        .setDisabled(true);
 
       const right = new MessageButton()
         .setCustomId("right")
         .setEmoji(e.Right)
         .setStyle("SECONDARY");
 
-      row.setComponents(left, right);
+      row.setComponents(right);
 
       let msg = await message.reply({ embeds: [embed], components: [row] });
 
@@ -77,8 +76,7 @@ module.exports = class Punish extends Command {
         .on("end", async (r, reason) => {
           if (reason != "time") return;
 
-          right.setDisabled(true);
-          left.setDisabled(true);
+          msg.delete()
         })
 
         .on("collect", async (r) => {
@@ -92,27 +90,25 @@ module.exports = class Punish extends Command {
                   name: message.guild.name,
                   iconURL: message.guild.iconURL({ dynamic: true }),
                 })
-                .setDescription(`${e.MemberRemove} › Sistema de **Punição**`)
+                .setDescription(`${e.Punish} › Sistema de **Punições**`)
                 .addFields([
                   {
-                    name: "Comandos:",
+                    name: `${e.Command} | Comandos:`,
                     value: `> **punish <membro>** - Aplique uma punição ao membro inserido.\n> **punish list** - Veja a lista de membros punidos.\n> **punish set <chat>** - Defina o canal de logs.\n> **punish msg <msg>** - Defina a mensagem de punição.`,
                   },
                   {
-                    name: `Placeholders:`,
+                    name: `${e.Image} | Placeholders:`,
                     value: `> **[tag]** - Mostra a tag do usuário.\n> **[id]** - Mostra o ID do usuário.\n> **[staff]** - Mostra a tag do responsável.\n> **[guild]** - Mostra o nome do servidor.\n> **[punish]** - Mostra a punição aplicada.\n> **[reason]** - Mostra o motivo da punição.`,
                   },
                 ]);
 
-              right.setDisabled(true);
-              left.setDisabled(false);
+              row.setComponents(left)
               await r.deferUpdate();
               await msg.edit({ embeds: [info], components: [row] });
               break;
             }
             case "left": {
-              right.setDisabled(false);
-              left.setDisabled(true);
+              row.setComponents(right)
               await r.deferUpdate();
               await msg.edit({ embeds: [embed], components: [row] });
               break;
@@ -125,7 +121,7 @@ module.exports = class Punish extends Command {
     if(['list', 'list', 'membros'].includes(args[0])) {
       if (!guildDBData.punish.members.length) {
         return message.reply(
-          `${e.Error} | ${message.author}, eu não puni ninguém neste servidor até o momento.`
+          `${e.List} › Até o **momento**, eu não **puni** ninguém nesta **guilda**.`
         );
       } else {
         const LIST = new Embed(message.author)
@@ -133,17 +129,15 @@ module.exports = class Punish extends Command {
               name: `${message.guild.name}`,
               iconURL: message.guild.iconURL()
             })
-            .addFields({
-              name: `${e.Member} | Usuários:`,
-              value: `${guildDBData.punish.members
-                .map(
-                  (x) =>
-                    `> User: **${
-                      this.client.users.cache.get(x).tag
-                    }**\n> ID: **${this.client.users.cache.get(x).id}**`
-                )
-                .join("\n\n")}`,
-            });
+            .setDescription(`${e.User} › Usuários:\n\n${guildDBData.punish.members
+              .map(
+                (x) =>
+                  `> User: **${
+                    this.client.users.cache.get(x).tag
+                  }**\n> ID: **${this.client.users.cache.get(x).id}**`
+              )
+              .join("\n\n")}`)
+            .setThumbnail(message.guild.iconURL({size: 2048}))
 
           return message.reply({embeds: [LIST]});
       }
@@ -156,17 +150,19 @@ module.exports = class Punish extends Command {
 
       if (!channel) {
         return message.reply(
-          `${e.Error} | ${message.author}, você precisa inserir um canal para ser definido.`
+          `${e.InsertError} › Você **precisa** inserir o **chat** que deseja **adicionar** ao sistema.`
         );
-      } else if (!channel.type === "text") {
+      }
+      if (channel.type !== "GUILD_TEXT") {
         return message.reply(
-          `${e.Error} | ${message.author}, você deve inserir um canal de texto.`
+          `${e.Error} › O **chat** deve ser do tipo **Texto**.`
         );
-      } else if (guildDBData.punish.channel == channel.id) {
+      }
+      if (guildDBData.punish.channel == channel.id) {
         return message.reply(
-          `${e.Error} | ${message.author}, o canal inserido já está definido atualmente.`
+          `${e.Warning} › O chat **inserido** já está **adicionado** ao sistema.`
         );
-      } else {
+      }
         if (guildDBData) {
           guildDBData.punish.channel = channel.id;
           await guildDBData.save();
@@ -177,9 +173,8 @@ module.exports = class Punish extends Command {
           });
         }
         return message.reply(
-          `${e.Correct} | ${message.author}, o canal ${channel} foi adicionado com sucesso ao sistema.`
+          `${e.Success} › O **chat** ${channel} foi **adicionado** com sucesso ao **sistema**.`
         );
-      }
     }
 
     if (["message", "msg"].includes(args[0].toLowerCase())) {
@@ -187,15 +182,15 @@ module.exports = class Punish extends Command {
 
       if (!msg) {
         return message.reply(
-          `${e.Error} | ${message.author}, você precisa inserir a mensagem.`
+          `${e.InsertError} › Você **precisa** inserir a **mensagem** que deseja **adicionar** ao sistema.`
         );
       } else if (msg == guildDBData.punish.message) {
         return message.reply(
-          `${e.Error} | ${message.author}, a mensagem inserida já está definida no momento.`
+          `${e.Warning} › A mensagem **inserida** já está **definida** no sistema.`
         );
       } else if (msg.length > 200) {
         return message.reply(
-          `${e.Error} | ${message.author}, a mensagem deve ter no máximo \`200\` caracteres.`
+          `${e.Size} › A **mensagem** deve ter no máximo **200 caracteres**.`
         );
       } else {
         if (guildDBData) {
@@ -208,7 +203,7 @@ module.exports = class Punish extends Command {
           });
         }
         await message.reply(
-          `${e.Correct} | ${message.author}, a mensagem do sistema foi definida como: \`\`\`${msg}\`\`\``
+          `${e.Success} › Você **alterou** a mensagem do **sistema** com sucesso! \n\`\`\`ini\nResultado: "${msg}"\`\`\``
         );
       }
       return;
@@ -218,15 +213,15 @@ module.exports = class Punish extends Command {
 
     if (USER) {
       const member = message.guild.members.cache.get(USER.id);
-      if(USER.id == this.client.user.id) return message.reply(`${e.Error} | ${message.author}, você não pode me punir.`)
-      else if(USER.id == message.author.id) return message.reply(`${e.Error} | ${message.author}, você não pode se punir.`)
-      else if(member.roles.highest.position >= message.member.roles.highest.position) return message.reply(`${e.Error} | ${message.author}, este membro possui cargo mais alto ou equivalente ao seu!`)
-      else if(member.roles.highest.position >= message.guild.me.roles.highest.position) return message.reply(`${e.Error} | ${message.author}, este membro possui cargo mais alto ou equivalente ao meu!`)
+      if(USER.id == this.client.user.id) return message.reply(`${e.Error} › Não tem como eu me banir, né?`)
+      else if(USER.id == message.author.id) return message.reply(`${e.Error} › Você **não** pode se **punir**.`)
+      else if(member.roles.highest.position >= message.member.roles.highest.position) return message.reply(`${e.Rank} › Você só pode **punir** membros com **cargo inferior** ao seu.`)
+      else if(member.roles.highest.position >= message.guild.me.roles.highest.position) return message.reply(`${e.Rank} › Eu **não** consigo **punir** este membro.`)
 
       const embed = new Embed(message.author)
         .setAuthor({ name: USER.tag, iconURL: USER.avatarURL() })
         .setDescription(
-          `Utilize os **botões** abaixo para **selecionar** o tipo de **punição** que será aplicada ao **usuário**.\n\n> ${e.Help} | Caso seja um engano, utilize o botão **"Cancelar"**\n> ${e.Member} | Usuário a ser punido: **${USER.tag}**\n> ${e.Config} | Você possui **1 minuto** para interagir.`
+          `Utilize os **botões** abaixo para **selecionar** o tipo de **punição** que será aplicada ao **usuário**.\n\n> ${e.Tip} | Caso seja um engano, utilize o botão **"Cancelar"**\n> ${e.User} | Usuário a ser punido: **${USER.tag}**\n> ${e.Time} | Você possui **1 minuto** para interagir.`
         )
         .setThumbnail(USER.avatarURL({ dynamic: true, size: 2048 }));
 
@@ -235,17 +230,17 @@ module.exports = class Punish extends Command {
           .setLabel("Banir")
           .setCustomId("ban")
           .setStyle("SECONDARY")
-          .setEmoji(e.Trash),
+          .setEmoji(e.Punish),
         new MessageButton()
           .setLabel("Expulsar")
           .setCustomId("kick")
           .setStyle("SECONDARY")
-          .setEmoji(e.MemberRemove),
+          .setEmoji(e.Kick),
         new MessageButton()
           .setLabel("Cancelar")
           .setCustomId("cancel")
           .setStyle("SECONDARY")
-          .setEmoji(e.Error)
+          .setEmoji(e.Trash)
       );
 
       const msg = await message.reply({ embeds: [embed], components: [row] });
@@ -264,7 +259,7 @@ module.exports = class Punish extends Command {
           if (reason != "time") return;
 
           msg.edit({
-            content: `${e.Error} | ${message.author}, o tempo para interagir acabou.`,
+            content: `${e.Time} › O **tempo** para interagir **acabou**.`,
             embeds: [],
             components: [],
           });
@@ -277,7 +272,7 @@ module.exports = class Punish extends Command {
           switch (r.customId) {
             case "ban": {
               msg.edit({
-                content: `${e.Help} | ${message.author}, insira o motivo da punição.\n> Digite **"Nada"** para **Motivo não Informado**.\n> Digite **"Cancelar"** para cancelar o banimento.`,
+                content: `${e.Idea} › Insira o **motivo** da punição.\n> Digite **"Nada"** para **Motivo não informado**.\n> Digite **"Cancelar"** para cancelar o **banimento**.`,
                 embeds: [],
                 components: [],
               });
@@ -298,7 +293,7 @@ module.exports = class Punish extends Command {
                     )
                   ) {
                     message.reply({
-                      content: `${e.Trash} | ${message.author}, você cancelou a punição.`,
+                      content: `${e.Block} › Você **cancelou** a punição.`,
                       embeds: [],
                       components: [],
                     });
@@ -316,7 +311,7 @@ module.exports = class Punish extends Command {
                   const embed = new Embed(message.author)
                     .setAuthor({ name: USER.tag, iconURL: USER.avatarURL() })
                     .setDescription(
-                      `Você está prestes a banir o usuário **${USER.tag}**. Você tem certeza disso?\n\n> ${e.Email} | Motivo selecionado: **${reason}**\n> ${e.Correct} | **Confirmar** = Banir o usuário.\n> ${e.Error} | **Cancelar** = Cancela o banimento.`
+                      `${e.Warn} › **Você** está prestes a **banir** o usuário **${USER.tag}**. Você tem **certeza** disso?\n\n> ${e.Message} | **Motivo** selecionado: **${reason}**\n> ${e.Success} | **Confirmar** = Banir o usuário.\n> ${e.Error} | **Cancelar** = Cancela o banimento.`
                     )
                     .setThumbnail(
                       USER.avatarURL({ dynamic: true, size: 2048 })
@@ -327,7 +322,7 @@ module.exports = class Punish extends Command {
                       .setLabel("Confirmar")
                       .setCustomId("confirm")
                       .setStyle("SECONDARY")
-                      .setEmoji(e.Correct),
+                      .setEmoji(e.Success),
                     new MessageButton()
                       .setLabel("Cancelar")
                       .setCustomId("cancel")
@@ -358,7 +353,7 @@ module.exports = class Punish extends Command {
                       if (reason != "time") return;
 
                       mensagem.edit({
-                        content: `${e.Error} | ${message.author}, o tempo para interagir acabou.`,
+                        content: `${e.Time} › O **tempo** para interagir **acabou**.`,
                         embeds: [],
                         components: [],
                       });
@@ -391,7 +386,7 @@ module.exports = class Punish extends Command {
                               : guildDBData.punish.channel
                           );
                           message.reply(
-                            `${e.Correct} | ${message.author}, usuário punido com sucesso!`
+                            `${e.Success} › Você **baniu** o usuário **${USER.tag}** com **sucesso**!`
                           );
                           if (guildDBData.punish.message == "null") {
                             const punish = new Embed(this.client.user)
@@ -404,19 +399,19 @@ module.exports = class Punish extends Command {
                               )
                               .addFields([
                                 {
-                                  name: `${e.Member} | Usuário Punido:`,
+                                  name: `${e.User} › Usuário Punido:`,
                                   value: `> Tag: **${USER.tag}**\n> ID: **${USER.id}**`,
                                 },
                                 {
-                                  name: `${e.Crown} | Responsável:`,
+                                  name: `${e.Crown} › Responsável:`,
                                   value: `> Tag: **${message.author.tag}**\n> ID: **${USER.id}**`,
                                 },
                                 {
-                                  name: `${e.Email} | Motivo:`,
+                                  name: `${e.Message} › Motivo:`,
                                   value: `> **${reason}**`,
                                 },
                                 {
-                                  name: `${e.Trash} | Tipo de Punição:`,
+                                  name: `${e.Punish} › Tipo de Punição:`,
                                   value: `> **Banimento**.`,
                                 },
                               ])
@@ -445,7 +440,7 @@ module.exports = class Punish extends Command {
                         }
                         case "cancel": {
                           mensagem.edit({
-                            content: `${e.Trash} | ${message.author}, você cancelou a punição.`,
+                            content: `${e.Block} › Você **cancelou** a punição.`,
                             embeds: [],
                             components: [],
                           });
@@ -458,7 +453,7 @@ module.exports = class Punish extends Command {
             }
             case "kick": {
               msg.edit({
-                content: `${e.Help} | ${message.author}, insira o motivo da punição.\n> Digite **"Nada"** para **Motivo não Informado**.\n> Digite **"Cancelar"** para cancelar o banimento.`,
+                content: `${e.Idea} › Insira o **motivo** da punição.\n> Digite **"Nada"** para **Motivo não informado**.\n> Digite **"Cancelar"** para cancelar o **banimento**.`,
                 embeds: [],
                 components: [],
               });
@@ -479,7 +474,7 @@ module.exports = class Punish extends Command {
                     )
                   ) {
                     message.reply({
-                      content: `${e.Trash} | ${message.author}, você cancelou a punição.`,
+                      content: `${e.Block} › Você **cancelou** a punição.`,
                       embeds: [],
                       components: [],
                     });
@@ -497,7 +492,7 @@ module.exports = class Punish extends Command {
                   const embed = new Embed(message.author)
                     .setAuthor({ name: USER.tag, iconURL: USER.avatarURL() })
                     .setDescription(
-                      `Você está prestes a expulsar o usuário **${USER.tag}**. Você tem certeza disso?\n\n> ${e.Email} | Motivo selecionado: **${reason}**\n> ${e.Correct} | **Confirmar** = Expulsar o usuário.\n> ${e.Error} | **Cancelar** = Cancela a expulsão.`
+                      `${e.Warn} › **Você** está prestes a **expulsar** o usuário **${USER.tag}**. Você tem **certeza** disso?\n\n> ${e.Message} | **Motivo** selecionado: **${reason}**\n> ${e.Success} | **Confirmar** = Expulsar o usuário.\n> ${e.Error} | **Cancelar** = Cancela a expulsão.`
                     )
                     .setThumbnail(
                       USER.avatarURL({ dynamic: true, size: 2048 })
@@ -508,7 +503,7 @@ module.exports = class Punish extends Command {
                       .setLabel("Confirmar")
                       .setCustomId("confirm")
                       .setStyle("SECONDARY")
-                      .setEmoji(e.Correct),
+                      .setEmoji(e.Success),
                     new MessageButton()
                       .setLabel("Cancelar")
                       .setCustomId("cancel")
@@ -539,7 +534,7 @@ module.exports = class Punish extends Command {
                       if (reason != "time") return;
 
                       mensagem.edit({
-                        content: `${e.Error} | ${message.author}, o tempo para interagir acabou.`,
+                        content: `${e.Time} › O **tempo** para interagir **acabou**.`,
                         embeds: [],
                         components: [],
                       });
@@ -572,7 +567,7 @@ module.exports = class Punish extends Command {
                               : guildDBData.punish.channel
                           );
                           message.reply(
-                            `${e.Correct} | ${message.author}, usuário punido com sucesso!`
+                            `${e.Success} › Você **expulsou** o usuário **${USER.tag}** com **sucesso**!`
                           );
                           if (guildDBData.punish.message == "null") {
                             const punish = new Embed(this.client.user)
@@ -585,19 +580,19 @@ module.exports = class Punish extends Command {
                               )
                               .addFields([
                                 {
-                                  name: `${e.Member} | Usuário Punido:`,
+                                  name: `${e.User} › Usuário Punido:`,
                                   value: `> Tag: **${USER.tag}**\n> ID: **${USER.id}**`,
                                 },
                                 {
-                                  name: `${e.Crown} | Responsável:`,
+                                  name: `${e.Crown} › Responsável:`,
                                   value: `> Tag: **${message.author.tag}**\n> ID: **${USER.id}**`,
                                 },
                                 {
-                                  name: `${e.Email} | Motivo:`,
+                                  name: `${e.Message} › Motivo:`,
                                   value: `> **${reason}**`,
                                 },
                                 {
-                                  name: `${e.Trash} | Tipo de Punição:`,
+                                  name: `${e.Punish} › Tipo de Punição:`,
                                   value: `> **Expulsão**.`,
                                 },
                               ])
@@ -626,7 +621,7 @@ module.exports = class Punish extends Command {
                         }
                         case "cancel": {
                           mensagem.edit({
-                            content: `${e.Trash} | ${message.author}, você cancelou a punição.`,
+                            content: `${e.Block} › Você **cancelou** a punição.`,
                             embeds: [],
                             components: [],
                           });
@@ -639,7 +634,7 @@ module.exports = class Punish extends Command {
             }
             case "cancel": {
               msg.edit({
-                content: `${e.Trash} | ${message.author}, você cancelou a punição.`,
+                content: `${e.Block} › Você **cancelou** a punição.`,
                 embeds: [],
                 components: [],
               });

@@ -31,11 +31,11 @@ module.exports = class Autorole extends Command {
           iconURL: message.guild.iconURL({ dynamic: true }),
         })
         .setDescription(
-          `${e.Flag} › Sistema de **Cargo Automático**\n\n> ${
-            e.Archive
+          `${e.Role} › Sistema de **Cargo Automático**\n\n> ${
+            e.Switch
           } | Status: **${
             guildDBData.autorole.status == false ? `Desativado` : `Ativado`
-          }**\n> ${e.Save} | Cargo: **${
+          }**\n> ${e.Role} | Cargo: **${
             guildDBData.autorole.roles.length == 0
               ? `Nenhum cargo definido.`
               : `${autorole.roles.map((x) => `<@&${x}>`).join(", ")}`
@@ -48,14 +48,13 @@ module.exports = class Autorole extends Command {
         .setCustomId("left")
         .setEmoji(e.Left)
         .setStyle("SECONDARY")
-        .setDisabled(true);
 
       const right = new MessageButton()
         .setCustomId("right")
         .setEmoji(e.Right)
         .setStyle("SECONDARY");
 
-      row.setComponents(left, right);
+      row.setComponents(right);
 
       let msg = await message.reply({ embeds: [embed], components: [row] });
 
@@ -72,8 +71,7 @@ module.exports = class Autorole extends Command {
         .on("end", async (r, reason) => {
           if (reason != "time") return;
 
-          right.setDisabled(true);
-          left.setDisabled(true);
+          msg.delete()
         })
 
         .on("collect", async (r) => {
@@ -87,23 +85,21 @@ module.exports = class Autorole extends Command {
                   name: message.guild.name,
                   iconURL: message.guild.iconURL({ dynamic: true }),
                 })
-                .setDescription(`${e.Flag} › Sistema de **Cargo Automático**`)
+                .setDescription(`${e.Role} › Sistema de **Cargo Automático**`)
                 .addFields([
                   {
-                    name: "Comandos:",
+                    name: `${e.Command} | Comandos:`,
                     value: `> **autorole add <cargo>** - Adicione um cargo ao sistema.\n> **autorole remove <cargo>** - Remova um cargo do sistema\n> **autorole list** - Veja a lista de cargos adicionados.\n> **autorole status** - Ligue ou desligue o sistema.`,
                   },
                 ]);
 
-              right.setDisabled(true);
-              left.setDisabled(false);
+              row.setComponents(left);
               await r.deferUpdate();
               await msg.edit({ embeds: [info], components: [row] });
               break;
             }
             case "left": {
-              right.setDisabled(false);
-              left.setDisabled(true);
+              row.setComponents(right);
               await r.deferUpdate();
               await msg.edit({ embeds: [embed], components: [row] });
               break;
@@ -120,19 +116,19 @@ module.exports = class Autorole extends Command {
 
       if (!role) {
         return message.reply(
-          `${e.Error} | ${message.author}, você precisa inserir o cargo que deseja adicionar ao sistema.`
+          `${e.InsertError} › Você **precisa** inserir o **cargo** que deseja **adicionar** ao sistema.`
         );
       } else if (autorole.roles.length >= 5) {
         return message.reply(
-          `${e.Error} | ${message.author}, você já atingiu o limite de **5 cargos**.`
+          `${e.Error} › Você já **atingiu** o limite de **5 cargos**.`
         );
       } else if (autorole.roles.find((x) => x === role.id)) {
         return message.reply(
-          `${e.Error} | ${message.author}, o cargo inserido já está adicionado no sistema.`
+          `${e.Warning} › O cargo **inserido** já está **adicionado** ao sistema.`
         );
       } else {
         message.reply(
-          `${e.Correct} | ${message.author}, o cargo ${role} foi adicionado no sistema.`
+          `${e.Success} › O **cargo** ${role} foi **adicionado** ao sistema.`
         );
         if (guildDBData) {
           guildDBData.autorole.roles.push(role.id);
@@ -154,19 +150,19 @@ module.exports = class Autorole extends Command {
 
       if (!role) {
         return message.reply(
-          `${e.Error} | ${message.author}, você precisa inserir o cargo que deseja remover do sistema.`
+          `${e.InsertError} › Você **precisa** inserir o **cargo** que deseja **remover** do sistema.`
         );
       } else if (!autorole.roles.length) {
         return message.reply(
-          `${e.Error} | ${message.author}, não há nenhum cargo adicionado no sistema.`
+          `${e.Warning} › Não há **nenhum cargo** adicionado ao **sistema**.`
         );
       } else if (!autorole.roles.find((x) => x === role.id)) {
         return message.reply(
-          `${e.Error} | ${message.author}, o cargo inserido não está adicionado no sistema.`
+          `${e.Warning} › O **cargo** inserido **não** está **listado** no sistema.`
         );
       } else {
         message.reply(
-          `${e.Correct} | ${message.author}, o cargo ${role} foi removido do sistema.`
+          `${e.Success} › ${message.author}, o cargo ${role} foi removido do sistema.`
         );
         guildDBData.autorole.roles.pull(role.id);
         await guildDBData.save();
@@ -178,12 +174,12 @@ module.exports = class Autorole extends Command {
     if (["list", "lista"].includes(args[0].toLowerCase())) {
       if (!autorole.roles.length) {
         return message.reply(
-          `${e.Error} | ${message.author}, não há nenhum cargo adicionado no sistema.`
+          `${e.Warning} › Não há **nenhum cargo** adicionado ao **sistema**.`
         );
       } else {
-        const LIST = new Embed(message.author).setDescription(
-          autorole.roles.map((x) => `<@&${x}>`).join(", ")
-        );
+        const LIST = new Embed(message.author)
+        .setAuthor({name: message.guild.name, iconURL: message.guild.iconURL()})
+        .setDescription(`${e.Role} › **Cargos** Automáticos:\n\n${autorole.roles.map((x) => `> <@&${x}>`).join("\n")}`);
 
         message.reply({ embeds: [LIST] });
       }
@@ -195,14 +191,14 @@ module.exports = class Autorole extends Command {
       if (guildDBData.autorole.status == false) {
         if (guildDBData.autorole.roles.length == 0) {
           return message.reply(
-            `${e.Error} | ${message.author}, você precisa definir o(s) cargo(s) automático(s) antes de ligar o sistema.`
+            `${e.InsertError} › Você precisa **inserir** algum **cargo** no sistema para **liga-lo**.`
           );
         } else {
           guildDBData.autorole.status = true;
           await guildDBData.save();
 
           return message.reply(
-            `${e.Correct} | ${message.author}, sistema ativado com sucesso.`
+            `${e.On} › Agora o **sistema** se encontra **ligado**.`
           );
         }
       }
@@ -211,7 +207,7 @@ module.exports = class Autorole extends Command {
         await guildDBData.save();
 
         return message.reply(
-          `${e.Correct} | ${message.author}, sistema desativado com sucesso.`
+          `${e.Off} › Agora o **sistema** se encontra **desligado**.`
         );
       }
     }
