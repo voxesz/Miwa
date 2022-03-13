@@ -32,23 +32,26 @@ module.exports = class Profile extends Command {
     const follow = new MessageButton()
       .setCustomId("follow")
       .setLabel("Seguir")
-      .setStyle("SECONDARY");
+      .setStyle("SECONDARY")
+      .setEmoji(e.Follow)
 
     const following = new MessageButton()
       .setCustomId("following")
-      .setLabel("Seguindo")
-      .setStyle("SECONDARY");
+      .setLabel("Amigos")
+      .setStyle("SECONDARY")
+      .setEmoji(e.Friends)
 
     const followers = new MessageButton()
       .setCustomId("followers")
       .setLabel("Seguidores")
-      .setStyle("SECONDARY");
+      .setStyle("SECONDARY")
+      .setEmoji(e.Like)
 
-    row.setComponents([follow]);
+    row.setComponents([follow, followers]);
 
     if (USER.id == message.author.id) follow.setDisabled(true);
     if (userDBData.social.followers.some((x) => x == message.author.id))
-      row.setComponents([following]);
+      row.setComponents([following, followers]);
 
     const canvas = createCanvas(1000, 600);
     const ctx = canvas.getContext("2d");
@@ -156,7 +159,7 @@ module.exports = class Profile extends Command {
                   : userDBData.social.name
               }**.`
             );
-            row.setComponents(following);
+            row.setComponents([following, followers]);
             await msg.edit({ components: [row] });
             break;
           }
@@ -183,7 +186,7 @@ module.exports = class Profile extends Command {
               }**.`,
               ephemeral: true
             });
-            row.setComponents(follow);
+            row.setComponents([follow, followers]);
             await msg.edit({ components: [row] });
             break;
           }

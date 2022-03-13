@@ -79,5 +79,8 @@ module.exports = {
     Blacklist: "<:Blacklist:951641252087074826>",
     Cosmos: '<:Cosmos:951842209181859895>',
     Andromeda: "<:Andromeda:951842112490602516>",
-    Verify: "<:Verify:952675954575159346>"
+    Verify: "<:Verify:952675954575159346>",
+    Follow: "<:Follow:952703383112941588>",
+    Like: "<:Like:952703710725812304>",
+    Friends: "<:Friends:952704572273614888>"
 }
