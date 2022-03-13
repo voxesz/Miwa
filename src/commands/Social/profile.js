@@ -26,6 +26,7 @@ module.exports = class Profile extends Command {
     if (!USER) USER = message.author;
 
     const userDBData = await this.client.userDB.findOne({ _id: USER.id });
+    if(!userDBData) return message.reply(`${e.Error} › **Desculpe**, você parece **novo** pra mim, poderia **executar** o comando **novamente**?`)
 
     const row = new MessageActionRow();
 

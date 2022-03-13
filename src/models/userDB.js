@@ -14,11 +14,11 @@ let userDB = new Schema({
 	},
 	social: {
 		name: { type: String, default: null },
-		user: { type: String, default: null},
 		bio: { type: String, default: null },
 		followers: { type: Array, default: [] },
 		following: { type: Array, default: [] },
-		verified: { type: Boolean, default: false }
+		verified: { type: Boolean, default: false },
+		backgrounds: { type: Array, default: [] }
 	}
 });
 
