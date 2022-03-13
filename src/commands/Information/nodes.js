@@ -21,6 +21,9 @@ module.exports = class Nodes extends Command {
       iconURL: this.client.user.avatarURL(),
     });
 
+    const lavalinkUSAPing = await this.client.music.nodes.find(n => n.identifier === 'Cosmos').ping();
+    const lavalinkEUPing = await this.client.music.nodes.find(n => n.identifier === 'Andromeda').ping();
+
     embed.addFields([
         {
             name: `${e.Cosmos} › ${nodes[0].options.id}`,
@@ -28,7 +31,7 @@ module.exports = class Nodes extends Command {
             > ${e.MusicBox} | Players: **${nodes[0].stats.players}**
             > ${e.Time} | Uptime: **${moment
               .duration(nodes[0].stats.uptime)
-              .format("d[d] h[h] m[m] s[s]")}**\n> ${e.Memory} | RAM: **${(nodes[0].stats.memory.used / 1024 / 1024).toFixed(0)}MB**`,
+              .format("d[d] h[h] m[m] s[s]")}**\n> ${e.Memory} | RAM: **${(nodes[0].stats.memory.used / 1024 / 1024).toFixed(0)}MB**\n> ${e.Wifi} | Ping: **${lavalinkUSAPing}ms**`,
             inline: true
         },
         {
@@ -37,7 +40,7 @@ module.exports = class Nodes extends Command {
             > ${e.MusicBox} | Players: **${nodes[1].stats.players}**
             > ${e.Time} | Uptime: **${moment
               .duration(nodes[1].stats.uptime)
-              .format("d[d] h[h] m[m] s[s]")}**\n> ${e.Memory} | RAM: **${(nodes[1].stats.memory.used / 1024 / 1024).toFixed(0)}MB**`,
+              .format("d[d] h[h] m[m] s[s]")}**\n> ${e.Memory} | RAM: **${(nodes[1].stats.memory.used / 1024 / 1024).toFixed(0)}MB**\n> ${e.Wifi} | Ping: **${lavalinkEUPing}ms**`,
             inline: true
         }
     ])
