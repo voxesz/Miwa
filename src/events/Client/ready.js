@@ -4,6 +4,8 @@ module.exports = class {
 	}
 
 	async execute () {
+		const client = await this.client.clientDB.findOne({clientID: this.client.user.id})
+		if(!client) await this.client.clientDB.create({clientID: this.client.user.id})
 		this.client.music.start(this.client.user.id);
 		setInterval(() => {
 			const status = [
