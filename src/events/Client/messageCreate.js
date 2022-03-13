@@ -169,7 +169,7 @@ module.exports = class messageCreate {
 
       if (cliente.blacklist.some((x) => x == message.author.id)) {
         return message.reply(
-          `${e.Block} › **Você** está em minha **Lista Negra**, portanto **não** pode me **usar**.`
+          `${e.Blacklist} › **Você** está em minha **Lista Negra**, portanto **não** pode me **usar**.`
         );
       }
 
@@ -179,7 +179,7 @@ module.exports = class messageCreate {
           iconURL: this.client.user.displayAvatarURL({ dynamic: true }),
         })
         .setDescription(
-          `${e.List} › Logs de **Comandos**.\n\n> ${e.Command} | Comando: **${cmd.name}**> ${e.Information} | Args: **${args[0] ? args.join(" ") : "Nada."}**\n> ${e.User} | Autor: **${message.author.tag} (${message.author.id})**\n> ${e.Earth} | Servidor: **${message.guild.name} (${message.guild.id})**\n${e.Calendar} | Data: **${moment(Date.now()).format("L LT")}**`
+          `${e.List} › Logs de **Comandos**.\n\n> ${e.Command} | Comando: **${cmd.name}** | ${e.Information} | Args: **${args[0] ? args.join(" ") : "Nada."}**\n> ${e.User} | Autor: **${message.author.tag} (${message.author.id})**\n> ${e.Earth} | Servidor: **${message.guild.name} (${message.guild.id})**\n> ${e.Calendar} | Data: **${moment(Date.now()).format("L LT")}**`
         )
       this.client.sendLogs(embedError);
 

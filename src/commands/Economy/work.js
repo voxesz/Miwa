@@ -46,11 +46,11 @@ module.exports = class Work extends Command {
           },
         }
       );
-      let nextLevel = 500 * level;
-      if (userDBData.exp.xp >= nextLevel) {
-        userDBData.exp.level = userDBData.exp.level + 1;
-        userDBData.exp.xp = userDBData.exp.xp - nextLevel;
-        await userDBData.save();
+      let nextLevel = 500 * user.exp.level;
+      if (user.exp.xp >= nextLevel) {
+        user.exp.level = user.exp.level + 1;
+        user.exp.xp = user.exp.xp - nextLevel;
+        await user.save();
         await message.react(e.LevelUP);
       }
     }

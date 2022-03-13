@@ -29,7 +29,7 @@ connect(process.env.DATABASE, {})
 				secure: false
 			},
 			{
-				id: 'Aurora',
+				id: 'Andromeda',
 				hostname: String(process.env.EULAVALINKHOST),
 				port: 80,
 				password: String(process.env.LAVALINKPASSWORD),

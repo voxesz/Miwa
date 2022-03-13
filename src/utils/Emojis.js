@@ -75,5 +75,9 @@ module.exports = {
     Left: "<:Left:951269021754490881>",
     Right: "<:Right:951269021557346355>",
     LevelUP: "<:LevelUP:951620162560335923>",
-    Translate: "<:Translate:951631067008352276>"
+    Translate: "<:Translate:951631067008352276>",
+    Blacklist: "<:Blacklist:951641252087074826>",
+    Cosmos: '<:Cosmos:951842209181859895>',
+    Andromeda: "<:Andromeda:951842112490602516>",
+    Verify: "<:Verify:952675954575159346>"
 }

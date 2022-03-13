@@ -11,6 +11,14 @@ let userDB = new Schema({
 	cooldowns: {
 		work: { type: Date, default: null },
 		daily: { type: Date, default: null },
+	},
+	social: {
+		name: { type: String, default: null },
+		user: { type: String, default: null},
+		bio: { type: String, default: null },
+		followers: { type: Array, default: [] },
+		following: { type: Array, default: [] },
+		verified: { type: Boolean, default: false }
 	}
 });
 

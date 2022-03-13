@@ -23,22 +23,19 @@ module.exports = class Blacklist extends Command {
     if (args[0] == "list") {
       if (!cliente.blacklist.length) {
         return message.reply(
-          `${e.Error} | ${message.author}, minha lista negra está vazia.`
+          `${e.FindError} › Minha lista negra está **vazia**.`
         );
       } else {
         const LIST = new Embed(message.author)
-          .setTitle(`${e.Archives} Lista Negra`)
-          .addFields({
-            name: `${e.Member} | Usuários:`,
-            value: `${cliente.blacklist
-              .map(
-                (x) =>
-                  `> User: **\`${
-                    this.client.users.cache.get(x).tag
-                  }\`**\n> ID: **\`${this.client.users.cache.get(x).id}\`**`
-              )
-              .join("\n\n")}`,
-          });
+          .setAuthor({name: this.client.user.username, iconURL: this.client.user.avatarURL()})
+          .setDescription(`${e.Blacklist} › **Lista Negra**:\n\n${cliente.blacklist
+            .map(
+              (x) =>
+                `> User: **\`${
+                  this.client.users.cache.get(x).tag
+                }\`**\n> ID: **\`${this.client.users.cache.get(x).id}\`**`
+            )
+            .join("\n\n")}`)
 
         message.reply({ embeds: [LIST] });
       }
@@ -46,10 +43,10 @@ module.exports = class Blacklist extends Command {
       return;
     }
 
-    let USER = this.client.users.cache.get(args[0]) || message.mentions.users.first()
+    let USER = await this.client.getUser(args[0], message)
     if (!args[0]) {
       return message.reply(
-        `${e.Help} | ${message.author}, insira o usuário que deseja adicionar na Lista Negra.`
+        `${e.InsertError} › Insira o **usuário** que deseja **adicionar** na Lista Negra.`
       );
     } else if (cliente.blacklist.some((x) => x == USER.id)) {
       await this.client.clientDB.findOneAndUpdate(
@@ -57,7 +54,7 @@ module.exports = class Blacklist extends Command {
         { $pull: { blacklist: USER.id } }
       );
       return message.reply(
-        `${e.Correct} | ${message.author}, o membro **${USER.tag}** foi removido da minha Lista Negra.`
+        `${e.Success} › O membro **${USER.tag}** foi removido da minha **Lista Negra**.`
       );
     } else {
       await this.client.clientDB.findOneAndUpdate(
@@ -65,7 +62,7 @@ module.exports = class Blacklist extends Command {
         { $push: { blacklist: USER.id } }
       );
       message.reply(
-        `${e.Correct} | ${message.author}, o membro **${USER.tag}** foi adicionado a minha Lista Negra.`
+        `${e.Success} › O membro **${USER.tag}** foi adicionado a minha **Lista Negra**.`
       );
     }
   }

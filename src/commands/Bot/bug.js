@@ -10,7 +10,7 @@ module.exports = class Bug extends Command {
 		this.name = 'bug';
 		this.category = 'Bot';
 		this.description = 'Reporte um bug ao meu desenvolvedor.';
-		this.aliases = ['reportbug'];
+		this.aliases = ['reportbug', '🐛'];
 	}
 
 	async execute ({ message, args }) {
@@ -25,7 +25,7 @@ module.exports = class Bug extends Command {
 		const embed = new Embed(message.author)
 		.setAuthor({name: this.client.user.username, iconURL: this.client.user.avatarURL()})
 		.setDescription(`${e.Bug} › Um novo **BUG** foi encontrado.\n\n> ${e.BugInfo} › BUG encontrado: **${bug}**\n> ${e.User} › Autor: **${message.author.tag}**\n> ${e.Earth} › Guilda: **${message.guild.name}**`)
-		.setImage(image)
+		.setImage(image.url)
 		await channel.send({content: `<@${process.env.OWNER_ID}>`, embeds: [embed]})
 		return message.reply(`${e.Success} › BUG **enviado** ao meu desenvolvedor com **sucesso**, obrigada pela **ajuda**! :>`)
 		

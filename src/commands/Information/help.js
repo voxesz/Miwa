@@ -57,7 +57,7 @@ module.exports = class Help extends Command {
       );
     }
 
-    AJUDA.setDescription(`${e.Information} › Central de **Ajuda**\n\n> ${e.Command} | Comando: **${command.name}**\n> ${e.Message} | Descrição: **${
+    AJUDA.setDescription(`${e.Information} › Central de **Ajuda**\n\n> ${e.Command} | Comando: **${command.name}**\n> ${e.Folder} | Categoria: **${command.category}**\n> ${e.Message} | Descrição: **${
       !command.description.length ? `Sem descrição.` : command.description
     }**\n> ${e.Config} | Alternativas: **${
       !command.aliases.length

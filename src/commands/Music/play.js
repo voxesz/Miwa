@@ -99,10 +99,7 @@ module.exports = class Play extends Command {
       msc.setRequester(message.author);
       player.queue.push(msc);
 
-      if (!player.playing) {
-        player.play();
-
-        const music = new Embed(message.author)
+      const music = new Embed(message.author)
           .setAuthor({
             name: message.guild.name,
             iconURL: message.guild.iconURL(),
@@ -113,13 +110,19 @@ module.exports = class Play extends Command {
             } | Música: **${msc.title}**\n> ${e.User} | Autor: **${
               msc.author
             }**\n> ${emoji} | Plataforma: **${
-              plataform.charAt(0).toUpperCase() + plataform.slice(1).replace("-", " ")
+              plataform.charAt(0).toUpperCase() +
+              plataform.slice(1).replace("-", " ")
             }**`
           );
+
+      if (!player.playing) {
+        player.play();
         message.reply({ embeds: [music] });
       } else {
-	  message.reply(`${e.Music} › A música **${msc.title}** foi adicionada a **lista de reprodução**.\n> ${e.User} | **Solicitada** por: ${message.author}`);
-	  }
+        message.reply(
+          `${e.Music} › A música **${msc.title}** foi adicionada a **lista de reprodução**.\n> ${e.User} | **Solicitada** por: ${message.author}`
+        );
+      }
     }
   }
 };

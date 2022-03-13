@@ -48,7 +48,7 @@ module.exports = class Daily extends Command {
       userDBData.exp.xp = userDBData.exp.xp + xp;
       await userDBData.save();
     }
-    let nextLevel = 500 * level;
+    let nextLevel = 500 * userDBData.exp.level;
     if (userDBData.exp.xp >= nextLevel) {
       userDBData.exp.level = userDBData.exp.level + 1
       userDBData.exp.xp = userDBData.exp.xp - nextLevel;

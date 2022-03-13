@@ -17,8 +17,10 @@ module.exports = class Teste extends Command {
 
   async execute({ message, args }) {
 
-    const user = await this.client.userDB.findOne({_id: message.author.id})
-    message.channel.send(`<t:${Math.floor(this.client.convertMilliseconds(Date.now() + user.cooldowns.work))}:R>`)
+    const name = args.slice(0).join(" ");
+    
+    await this.client.userDB.findOneAndUpdate({_id: message.author.id}, {$set: {"social.bio": name}})
+    return message.reply("blz mano, bio trocou")
 
   }
 

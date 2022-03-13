@@ -29,7 +29,7 @@ module.exports = class Report extends Command {
 		const embed = new Embed(message.author)
 		.setAuthor({name: this.client.user.username, iconURL: this.client.user.avatarURL()})
 		.setDescription(`${e.Alert} › Um novo **reporte** foi enviado.\n\n> ${e.Criminal} › Usuário reportado: **${USER.tag} (${USER.id})**\n>\n> ${e.User} › Autor: **${message.author.tag}**\n> ${e.Earth} › Guilda: **${message.guild.name}**`)
-		.setImage(image)
+		.setImage(image.url)
 		channel.send({content: `<@&${process.env.STAFF_ID}>`,embeds: [embed]})
 		await message.reply(`${e.Success} › Reporte **enviado** a minha equipe com **sucesso**, logo resolveremos a situação! :>`)
 		
