@@ -21,6 +21,7 @@ module.exports = class Rank extends Command {
   }
 
   async execute({ message, args }) {
+    try {
     const COINS = await require("mongoose")
       .connection.collection("users")
       .find({ coins: { $gt: 0 } })
@@ -249,7 +250,10 @@ module.exports = class Rank extends Command {
           )
           .join("\n")}`
       );
-    //message.reply({ embeds: [TOP] });
+    
+  } catch {
+    return message.reply(`${e.Error} › **Não** há pessoas **suficientes** para serem mostradas no **rank**.`)
+  }
   }
 
   async PUSH(coins, members) {
