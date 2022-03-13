@@ -136,6 +136,11 @@ module.exports = class Profile extends Command {
         switch (r.customId) {
           case "follow": {
             await r.deferUpdate();
+            if (userDBData.social.followers.find((x) => x == message.author.id))
+              return r.followUp({
+                content: `${e.Error} › Você **já** segue este **usuário**.`,
+                ephemeral: true
+              });
             await this.client.userDB.findOneAndUpdate(
               { _id: message.author.id },
               { $push: { "social.following": USER.id } }
@@ -144,7 +149,7 @@ module.exports = class Profile extends Command {
               { _id: USER.id },
               { $push: { "social.followers": message.author.id } }
             );
-            message.reply(
+            r.followUp(
               `${e.Success} › **Agora** você está **seguindo** o(a) **${
                 userDBData.social.name == null
                   ? USER.username
