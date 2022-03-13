@@ -135,6 +135,7 @@ module.exports = class Profile extends Command {
         }
         switch (r.customId) {
           case "follow": {
+            await r.deferUpdate();
             await this.client.userDB.findOneAndUpdate(
               { _id: message.author.id },
               { $push: { "social.following": USER.id } }
@@ -151,13 +152,13 @@ module.exports = class Profile extends Command {
               }**.`
             );
             row.setComponents(following);
-            await r.deferUpdate();
             await msg.edit({ components: [row] });
             break;
           }
           case "following": {
+            await r.deferUpdate();
             if (!userDBData.social.followers.find((x) => x == message.author.id))
-              return r.reply({
+              return r.followUp({
                 content: `${e.Error} › Você **não** segue mais este **usuário**.`,
                 ephemeral: true
               });
@@ -169,7 +170,7 @@ module.exports = class Profile extends Command {
               { _id: USER.id },
               { $pull: { "social.followers": message.author.id } }
             );
-            r.reply({
+            r.followUp({
               content: `${e.Success} › Você **deixou** de seguir o(a) **${
                 userDBData.social.name == null
                   ? USER.username
@@ -178,7 +179,6 @@ module.exports = class Profile extends Command {
               ephemeral: true
             });
             row.setComponents(follow);
-            await r.deferUpdate();
             await msg.edit({ components: [row] });
             break;
           }
