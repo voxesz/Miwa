@@ -10,16 +10,16 @@ module.exports = class messageCreate {
   }
 
   async execute(message) {
-    const { cooldowns } = this.client;
-    if (!message.guild || message.author.bot) return;
-
-    const GetMention = (id) => new RegExp(`^<@!?${id}>( |)$`);
 
     const server = await this.client.guildDB.findOne({
       guildID: message.guild.id,
     });
-    if (!server)
-      await this.client.guildDB.create({ guildID: message.guild.id });
+    if (!server) await this.client.guildDB.create({ guildID: message.guild.id });
+
+    const { cooldowns } = this.client;
+    if (!message.guild || message.author.bot) return;
+
+    const GetMention = (id) => new RegExp(`^<@!?${id}>( |)$`);
 
     var prefix = prefix;
     if (!server) {
