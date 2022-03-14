@@ -39,6 +39,18 @@ connect(process.env.DATABASE, {})
 				maxRetryAttempts: 10,
 				retryAttemptsInterval: 3000,
 				secure: false
+			},
+			{
+				id: 'Astro',
+				hostname: String(process.env.EULAVALINKHOST2),
+				port: 80,
+				password: String(process.env.LAVALINKPASSWORD2),
+				region: 'USA',
+				resumeKey: 'Suki',
+				resumeTimeout: 5 * 60000,
+				maxRetryAttempts: 10,
+				retryAttemptsInterval: 3000,
+				secure: false
 			}
 		],
 		sendWS: (guildId, payload) => {

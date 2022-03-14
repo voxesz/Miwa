@@ -82,5 +82,6 @@ module.exports = {
     Verify: "<:Verify:952675954575159346>",
     Follow: "<:Follow:952703383112941588>",
     Like: "<:Like:952703710725812304>",
-    Friends: "<:Friends:952704572273614888>"
+    Friends: "<:Friends:952704572273614888>",
+    Astro: "<:Astro:953047666651197521>"
 }
