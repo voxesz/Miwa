@@ -48,6 +48,11 @@ module.exports = class Nodes extends Command {
         inline: true
       },
       {
+        name: `\u200b`,
+        value: `\u200b`,
+        inline: true
+      },
+      {
         name: `${e.Astro} › ${nodes[2].options.id}`,
         value: `> ${e.Switch} | Status: **${String(nodes[2].state).replace("0", "Reconectando").replace("1", "Conectado").replace("2", "Desconectado")}**
           > ${e.Earth} | Região: **${nodes[2].options.region}**
@@ -55,7 +60,7 @@ module.exports = class Nodes extends Command {
           > ${e.Time} | Uptime: **${moment
             .duration(nodes[2].stats.uptime)
             .format("d[d] h[h] m[m] s[s]")}**\n> ${e.Memory} | RAM: **${(nodes[2].stats.memory.used / 1024 / 1024).toFixed(0)}MB**\n> ${e.Wifi} | Ping: **${lavalinkEUAPing}ms**`,
-        inline: false
+        inline: true
       },
       {
         name: `${e.Blackhole} › ${nodes[3].options.id}`,
