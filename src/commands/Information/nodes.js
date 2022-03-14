@@ -71,7 +71,12 @@ module.exports = class Nodes extends Command {
             .duration(nodes[3].stats.uptime)
             .format("d[d] h[h] m[m] s[s]")}**\n> ${e.Memory} | RAM: **${(nodes[3].stats.memory.used / 1024 / 1024).toFixed(0)}MB**\n> ${e.Wifi} | Ping: **${lavalinkEU2Ping}ms**`,
         inline: true
-      }
+      },
+      {
+        name: `\u200b`,
+        value: `\u200b`,
+        inline: true
+      },
     ])
 
     message.reply({ embeds: [embed] });
