@@ -14,7 +14,7 @@ module.exports = class Username extends Command {
 
   async execute({ message, args }) {
     
-    if(args[0].content.match("(/^[\wà-úç.();?!+_=@,]$/gi")) return message.reply(`${e.InsertError} › Seu **nome de usuário** só pode conter **letras**, **números** e **acentos**.`)
+    if(["(/^[\wà-úç.();?!+_=@,]$/gi"].includes(args[0])) return message.reply(`${e.InsertError} › Seu **nome de usuário** só pode conter **letras**, **números** e **acentos**.`)
     const name = args[0]
     if(!name) return message.reply(`${e.InsertError} › Você **precisa** inserir o **nome** que deseja **definir**.`)
     if(name.length > 20) return message.reply(`${e.Size} › Seu **nome de usuário** não pode ter **mais** que **20 caracteres**.`)
