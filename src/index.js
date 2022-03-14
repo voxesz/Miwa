@@ -42,10 +42,22 @@ connect(process.env.DATABASE, {})
 			},
 			{
 				id: 'Astro',
-				hostname: String(process.env.EULAVALINKHOST2),
+				hostname: String(process.env.EUALAVALINKHOST),
 				port: 80,
 				password: String(process.env.LAVALINKPASSWORD2),
 				region: 'USA',
+				resumeKey: 'Suki',
+				resumeTimeout: 5 * 60000,
+				maxRetryAttempts: 10,
+				retryAttemptsInterval: 3000,
+				secure: false
+			},
+			{
+				id: 'Black Hole',
+				hostname: String(process.env.EULAVALINKHOST2),
+				port: 80,
+				password: String(process.env.LAVALINKPASSWORD2),
+				region: 'EU',
 				resumeKey: 'Suki',
 				resumeTimeout: 5 * 60000,
 				maxRetryAttempts: 10,

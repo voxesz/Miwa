@@ -83,5 +83,6 @@ module.exports = {
     Follow: "<:Follow:952703383112941588>",
     Like: "<:Like:952703710725812304>",
     Friends: "<:Friends:952704572273614888>",
-    Astro: "<:Astro:953047666651197521>"
+    Astro: "<:Astro:953047666651197521>",
+    Blackhole: "<:Blackhole:953050063918211082>"
 }
