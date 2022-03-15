@@ -142,62 +142,71 @@ module.exports = class Profile extends Command {
         switch (r.customId) {
           case "follow": {
             await r.deferUpdate();
-              if (userDBData.social.followers.find((x) => x == message.author.id))
-                return r.followUp({
-                  content: `${e.Error} › Você **já** segue este **usuário**.`,
-                  ephemeral: true
-                });
-              await this.client.userDB.findOneAndUpdate(
-                { _id: message.author.id },
-                { $push: { "social.following": USER.id } }
-              );
-              await this.client.userDB.findOneAndUpdate(
-                { _id: USER.id },
-                { $push: { "social.followers": message.author.id } }
-              );
-              r.followUp({
-                content: `${e.Success} › **Agora** você está **seguindo** o(a) **${userDBData.social.name == null
-                  ? USER.username
-                  : userDBData.social.name
-                }**.`, ephemeral: true
+            if (userDBData.social.followers.find((x) => x == message.author.id))
+              return r.followUp({
+                content: `${e.Error} › Você **já** segue este **usuário**.`,
+                ephemeral: true
               });
-              row.setComponents([following, followers]);
+            await this.client.userDB.findOneAndUpdate(
+              { _id: message.author.id },
+              { $push: { "social.following": USER.id } }
+            );
+            await this.client.userDB.findOneAndUpdate(
+              { _id: USER.id },
+              { $push: { "social.followers": message.author.id } }
+            );
+            r.followUp({
+              content: `${e.Success} › **Agora** você está **seguindo** o(a) **${userDBData.social.name == null
+                ? USER.username
+                : userDBData.social.name
+                }**.`, ephemeral: true
+            });
+            row.setComponents([following, followers]);
             await msg.edit({ components: [row] });
             break;
           }
           case "following": {
             await r.deferUpdate();
-              if (!userDBData.social.followers.find((x) => x == message.author.id))
-                return r.followUp({
-                  content: `${e.Error} › Você **não** segue mais este **usuário**.`,
-                  ephemeral: true
-                });
-              await this.client.userDB.findOneAndUpdate(
-                { _id: message.author.id },
-                { $pull: { "social.following": USER.id } }
-              );
-              await this.client.userDB.findOneAndUpdate(
-                { _id: USER.id },
-                { $pull: { "social.followers": message.author.id } }
-              );
-              r.followUp({
-                content: `${e.Success} › Você **deixou** de seguir o(a) **${userDBData.social.name == null
-                  ? USER.username
-                  : userDBData.social.name
-                  }**.`,
+            if (!userDBData.social.followers.find((x) => x == message.author.id))
+              return r.followUp({
+                content: `${e.Error} › Você **não** segue mais este **usuário**.`,
                 ephemeral: true
               });
-              row.setComponents([follow, followers]);
-              await msg.edit({ components: [row] });
+            await this.client.userDB.findOneAndUpdate(
+              { _id: message.author.id },
+              { $pull: { "social.following": USER.id } }
+            );
+            await this.client.userDB.findOneAndUpdate(
+              { _id: USER.id },
+              { $pull: { "social.followers": message.author.id } }
+            );
+            r.followUp({
+              content: `${e.Success} › Você **deixou** de seguir o(a) **${userDBData.social.name == null
+                ? USER.username
+                : userDBData.social.name
+                }**.`,
+              ephemeral: true
+            });
+            row.setComponents([follow, followers]);
+            await msg.edit({ components: [row] });
             break;
           }
           case "followers": {
             await r.deferUpdate();
             if (!users.has(message.author.id)) {
               users.add(message.author.id);
-              if(userDBData.social.followers.length == 0) return r.followUp({content: `${e.Size} › ${USER.id == message.author.id ? "**Você** não possui **seguidores**." : "Este **usuário** não possui **seguidores**."}`, ephemeral: true})
+              if (userDBData.social.followers.length == 0) return r.followUp({ content: `${e.Size} › ${USER.id == message.author.id ? "**Você** não possui **seguidores**." : "Este **usuário** não possui **seguidores**."}`, ephemeral: true })
               let follow = `${USER.id == message.author.id ? "Você" : "Ele(a)"} não o segue.`
               if (userDBData.social.following.find((x) => x == message.author.id)) follow = `${USER.id == message.author.id ? "Você" : "Ele(a)"} o segue.`
+              const row = new MessageActionRow()
+
+              const close = new MessageButton()
+                .setCustomId("close")
+                .setLabel("Fechar")
+                .setStyle("SECONDARY")
+                .setEmoji(e.Error)
+
+              row.setComponents([close]);
               var LIST = new Embed(message.author)
                 .setAuthor({ name: message.author.username, iconURL: message.author.avatarURL() })
                 .setDescription(`${e.Like} › **Seguidores**:\n\n${userDBData.social.followers
@@ -208,8 +217,35 @@ module.exports = class Profile extends Command {
                   )
                   .join("\n")}`)
 
-              var mensagem = await msg.reply({ embeds: [LIST] });
-                    } else return mensagem.edit({ embeds: [LIST] });
+              var mensagem = await msg.reply({ embeds: [LIST], components: [row] });
+              const filter = (interaction) => {
+                return interaction.isButton() && interaction.message.id === mensagem.id;
+              };
+
+              mensagem
+                .createMessageComponentCollector({
+                  filter: filter,
+                  time: 60000,
+                })
+
+                .on("end", async (r, reason) => {
+                  if (reason != "time") return;
+                  mensagem.delete();
+                  users.delete(message.author.id)
+                })
+
+                .on("collect", async (r) => {
+                  if (r.user.id !== message.author.id) {
+                    return r.deferUpdate();
+                  }
+                  switch (r.customId) {
+                    case "close": {
+                      mensagem.delete()
+                      users.delete(message.author.id)
+                    }
+                  }
+                })
+            } else return mensagem.edit({ embeds: [LIST], components: [row] });
             break;
           }
         }
