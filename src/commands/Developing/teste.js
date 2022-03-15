@@ -21,7 +21,7 @@ module.exports = class Teste extends Command {
 
     let timestamp = ~~(Date.now() / 1000)
     let work = ~~(user.cooldowns.work / 1000)
-    message.reply(`<t:${~~(work + timestamp)}:R>`)
+    message.reply(`<t:${~~(work - timestamp)}:R>`)
 
   }
 
