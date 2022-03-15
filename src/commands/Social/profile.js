@@ -198,7 +198,7 @@ module.exports = class Profile extends Command {
               if(userDBData.social.followers.length == 0) return r.followUp({content: `${e.Size} › ${USER.id == message.author.id ? "**Você** não possui **seguidores**." : "Este **usuário** não possui **seguidores**."}`, ephemeral: true})
               let follow = `${USER.id == message.author.id ? "Você" : "Ele(a)"} não o segue.`
               if (userDBData.social.following.find((x) => x == message.author.id)) follow = `${USER.id == message.author.id ? "Você" : "Ele(a)"} o segue.`
-              const LIST = new Embed(message.author)
+              var LIST = new Embed(message.author)
                 .setAuthor({ name: message.author.username, iconURL: message.author.avatarURL() })
                 .setDescription(`${e.Like} › **Seguidores**:\n\n${userDBData.social.followers
                   .map(
@@ -208,11 +208,12 @@ module.exports = class Profile extends Command {
                   )
                   .join("\n")}`)
 
-              msg.reply({ embeds: [LIST] });
-                    }
+              var mensagem = await msg.reply({ embeds: [LIST] });
+                    } else return mensagem.edit({ embeds: [LIST] });
             break;
           }
         }
       });
+      return users.remove(message.author.id);
   }
 };
