@@ -20,8 +20,8 @@ module.exports = class Teste extends Command {
     const user = await this.client.userDB.findOne({_id: message.author.id})
 
     let timestamp = ~~(Date.now() / 1000)
-    let work = ~~(user.cooldowns.work - timestamp) / 1000
-   message.reply(`<t:${~~(work / 1000)}:R>`)
+    let work = ~~(user.cooldowns.work / 1000)
+    message.reply(`<t:${~~(work + timestamp)}:R>`)
 
   }
 
