@@ -1,7 +1,8 @@
 const Command = require("../../structures/Command");
 const e = require("../../utils/Emojis");
 const Embed = require('../../structures/Embed');
-const { MessageActionRow, MessageButton, Collection } = require("discord.js");
+const { MessageActionRow, MessageButton } = require("discord.js");
+const Collection = require('../../utils/Collection')
 
 module.exports = class Background extends Command {
   constructor(client) {
@@ -26,14 +27,11 @@ module.exports = class Background extends Command {
     const embed = new Embed(message.author)
     .setAuthor({name: message.author.username, iconURL: message.author.avatarURL()})
 
-    /*.setDescription(`${e.Image} › Seus **Backgrounds**:\n\n> ${e.Folder} | Background: **Default**\n> ${e.Money} | Preço: **0 coins**`)
-    .setImage(`https://i.imgur.com/wesq7up.jpg`)*/
-
-    const itens = new Set()
+    const itens = new Collection()
     let actualPage = 1
 
     Object.entries(backgrounds).map(([, x]) => {
-        itens.add(
+        itens.push(
             `> ${e.Image} | Nome: **${x.name}**\n> ${e.ID} | ID: **${x.id}**\n> ${e.Link} | Link: **${x.link}**`
         )
     })
