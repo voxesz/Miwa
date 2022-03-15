@@ -3,15 +3,15 @@ const e = require("../../utils/Emojis");
 const Embed = require('../../structures/Embed');
 const { MessageActionRow, MessageButton } = require("discord.js");
 
-module.exports = class Biography extends Command {
+module.exports = class Background extends Command {
   constructor(client) {
     super(client);
     this.client = client;
 
-    this.name = "biography";
+    this.name = "background";
     this.category = "Social";
-    this.description = "Altere a biografia do seu perfil.";
-    this.aliases = ["biografia", "bio"];
+    this.description = "Veja os backgrounds que você possui.";
+    this.aliases = ["backgrounds", "bg"];
   }
 
   async execute({ message, args }) {
