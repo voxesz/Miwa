@@ -81,7 +81,7 @@ module.exports = class Background extends Command {
     })
     .on('collect', async(r) => {
         switch (r.setCustomId) {
-            case 'right':
+            case 'right': {
 
             if(actualPage === pages) return;
             actualPage++
@@ -96,6 +96,7 @@ module.exports = class Background extends Command {
 
             await r.deferUpdate();
             await msg.edit({embeds: [embed], components: [row]})
+        }
         }
     })
 
