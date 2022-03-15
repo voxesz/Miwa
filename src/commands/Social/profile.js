@@ -40,7 +40,7 @@ module.exports = class Profile extends Command {
 
     const following = new MessageButton()
       .setCustomId("following")
-      .setLabel("Amigos")
+      .setLabel("Seguindo")
       .setStyle("SECONDARY")
       .setEmoji(e.Friends)
 
