@@ -32,7 +32,7 @@ module.exports = class Background extends Command {
 
     Object.entries(backgrounds).map(([, x]) => {
         itens.push(
-            `> ${e.Image} | Nome: **${x.name}**\n> ${e.ID} | ID: **${x.id}**\n> ${e.Link} | Link: **${x.link}**`
+            `> ${e.Image} | Nome: **${x.name}**\n> ${e.ID} | ID: **${x.id}**`
         )
     })
 
@@ -68,6 +68,36 @@ module.exports = class Background extends Command {
     }
 
     const collector = msg.createMessageComponentCollector({filter: filter, time: 60000})
+
+    .on('end', async(r, reason) => {
+        if(reason != 'time') return;
+
+        right.setDisabled(true)
+        left.setDisabled(true)
+
+        row = new MessageActionRow().setComponents([left, right])
+
+        await msg.edit({embeds: [embed.setFooter({text: "O tempo para interagir acabou."})], components: [row]})
+    })
+    .on('collect', async(r) => {
+        switch (r.setCustomId) {
+            case 'right':
+
+            if(actualPage === pages) return;
+            actualPage++
+            paginatedItens = itens.paginate(actualPage, 1)
+            embed.setDescription(paginatedItens.join(" "))
+
+            if(actualPage === pages) right.setDisabled(true)
+
+            left.setDisabled(false)
+            
+            row = new MessageActionRow().setComponents([left, right])
+
+            await r.deferUpdate();
+            await msg.edit({embeds: [embed], components: [row]})
+        }
+    })
 
   }
 };
