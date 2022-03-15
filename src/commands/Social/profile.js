@@ -93,7 +93,7 @@ module.exports = class Profile extends Command {
     ctx.fillText(
       userDBData.social.bio == null
         ? "Este membro não possui uma biografia."
-        : userDBData.social.bio,
+        : await this.client.applyLineBreaks(userDBData.social.bio, 45),
       17,
       532
     );
@@ -245,7 +245,7 @@ module.exports = class Profile extends Command {
                     }
                   }
                 })
-            } else return mensagem.edit({ embeds: [LIST], components: [row] });
+            }
             break;
           }
         }
