@@ -196,8 +196,8 @@ module.exports = class Profile extends Command {
             if (!users.has(message.author.id)) {
               users.add(message.author.id);
               if(userDBData.social.followers.length == 0) return r.followUp({content: `${e.Size} › ${USER.id == message.author.id ? "**Você** não possui **seguidores**." : "Este **usuário** não possui **seguidores**."}`, ephemeral: true})
-              let follow = `Você não o segue.`
-              if (userDBData.social.following.find((x) => x == message.author.id)) follow = `Você o segue.`
+              let follow = `${USER.id == message.author.id ? "Você" : "Ele(a)"} não o segue.`
+              if (userDBData.social.following.find((x) => x == message.author.id)) follow = `${USER.id == message.author.id ? "Você" : "Ele(a)"} o segue.`
               const LIST = new Embed(message.author)
                 .setAuthor({ name: message.author.username, iconURL: message.author.avatarURL() })
                 .setDescription(`${e.Like} › **Seguidores**:\n\n${userDBData.social.followers
