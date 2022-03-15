@@ -9,6 +9,7 @@ const { loadImage, registerFont, createCanvas } = require("canvas");
 registerFont("src/assets/fonts/Montserrat-Bold.ttf", { family: "Bold" });
 registerFont("src/assets/fonts/Montserrat-Medium.ttf", { family: "Medium" });
 registerFont("src/assets/fonts/Montserrat-Regular.ttf", { family: "Regular" });
+const users = new Set();
 
 module.exports = class Profile extends Command {
   constructor(client) {
@@ -26,7 +27,7 @@ module.exports = class Profile extends Command {
     if (!USER) USER = message.author;
 
     const userDBData = await this.client.userDB.findOne({ _id: USER.id });
-    if(!userDBData) return message.reply(`${e.Error} › **Desculpe**, você parece **novo** pra mim, poderia **executar** o comando **novamente**?`)
+    if (!userDBData) return message.reply(`${e.Error} › **Desculpe**, você parece **novo** pra mim, poderia **executar** o comando **novamente**?`)
 
     const row = new MessageActionRow();
 
@@ -116,7 +117,7 @@ module.exports = class Profile extends Command {
 
     const attach = new MessageAttachment(canvas.toBuffer(), "Profile.png");
 
-    const msg = await message.reply({ files: [attach], components: [row] });
+    var msg = await message.reply({ files: [attach], components: [row] });
 
     const filter = (interaction) => {
       return interaction.isButton() && interaction.message.id === msg.id;
@@ -140,55 +141,74 @@ module.exports = class Profile extends Command {
         switch (r.customId) {
           case "follow": {
             await r.deferUpdate();
-            if (userDBData.social.followers.find((x) => x == message.author.id))
-              return r.followUp({
-                content: `${e.Error} › Você **já** segue este **usuário**.`,
-                ephemeral: true
-              });
-            await this.client.userDB.findOneAndUpdate(
-              { _id: message.author.id },
-              { $push: { "social.following": USER.id } }
-            );
-            await this.client.userDB.findOneAndUpdate(
-              { _id: USER.id },
-              { $push: { "social.followers": message.author.id } }
-            );
-            r.followUp(
-              `${e.Success} › **Agora** você está **seguindo** o(a) **${
-                userDBData.social.name == null
+            if (!users.has(message.author.id)) {
+              if (userDBData.social.followers.find((x) => x == message.author.id))
+                return r.followUp({
+                  content: `${e.Error} › Você **já** segue este **usuário**.`,
+                  ephemeral: true
+                });
+              await this.client.userDB.findOneAndUpdate(
+                { _id: message.author.id },
+                { $push: { "social.following": USER.id } }
+              );
+              await this.client.userDB.findOneAndUpdate(
+                { _id: USER.id },
+                { $push: { "social.followers": message.author.id } }
+              );
+              r.followUp(
+                `${e.Success} › **Agora** você está **seguindo** o(a) **${userDBData.social.name == null
                   ? USER.username
                   : userDBData.social.name
-              }**.`
-            );
-            row.setComponents([following, followers]);
+                }**.`
+              );
+              row.setComponents([following, followers]);
+            }
             await msg.edit({ components: [row] });
             break;
           }
           case "following": {
             await r.deferUpdate();
-            if (!userDBData.social.followers.find((x) => x == message.author.id))
-              return r.followUp({
-                content: `${e.Error} › Você **não** segue mais este **usuário**.`,
-                ephemeral: true
-              });
-            await this.client.userDB.findOneAndUpdate(
-              { _id: message.author.id },
-              { $pull: { "social.following": USER.id } }
-            );
-            await this.client.userDB.findOneAndUpdate(
-              { _id: USER.id },
-              { $pull: { "social.followers": message.author.id } }
-            );
-            r.followUp({
-              content: `${e.Success} › Você **deixou** de seguir o(a) **${
-                userDBData.social.name == null
+            if (!users.has(message.author.id)) {
+              if (!userDBData.social.followers.find((x) => x == message.author.id))
+                return r.followUp({
+                  content: `${e.Error} › Você **não** segue mais este **usuário**.`,
+                  ephemeral: true
+                });
+              await this.client.userDB.findOneAndUpdate(
+                { _id: message.author.id },
+                { $pull: { "social.following": USER.id } }
+              );
+              await this.client.userDB.findOneAndUpdate(
+                { _id: USER.id },
+                { $pull: { "social.followers": message.author.id } }
+              );
+              r.followUp({
+                content: `${e.Success} › Você **deixou** de seguir o(a) **${userDBData.social.name == null
                   ? USER.username
                   : userDBData.social.name
-              }**.`,
-              ephemeral: true
-            });
-            row.setComponents([follow, followers]);
-            await msg.edit({ components: [row] });
+                  }**.`,
+                ephemeral: true
+              });
+              row.setComponents([follow, followers]);
+              await msg.edit({ components: [row] });
+            }
+            break;
+          }
+          case "follows": {
+            await r.deferUpdate();
+            if (!users.has(message.author.id)) {
+              const LIST = new Embed(message.author)
+                .setAuthor({ name: message.author.username, iconURL: message.author.avatarURL() })
+                .setDescription(`${e.Like} › **Seguidores**:\n\n${userDBData.social.followers
+                  .map(
+                    (x) =>
+                      `> ${e.User} | User: **${this.client.users.cache.get(x).tag
+                      }**\n${e.Like} | **${userDBData.social.following.find((y) => y == this.client.users.cache.get(x).id ? "Você o segue" : "Você não o segue")}**`
+                  )
+                  .join("\n")}`)
+
+              msg.reply({ embeds: [LIST] });
+            }
             break;
           }
         }
