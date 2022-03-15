@@ -17,10 +17,7 @@ module.exports = class Teste extends Command {
 
   async execute({ message, args }) {
 
-    const name = args.slice(0).join(" ");
-    
-    await this.client.userDB.findOneAndUpdate({_id: message.author.id}, {$set: {"social.bio": name}})
-    return message.reply("blz mano, bio trocou")
+   message.channel.send(`<t:${~~(28800000 - (Date.now() - user.cooldowns.work) / 1000)}:R>`)
 
   }
 
