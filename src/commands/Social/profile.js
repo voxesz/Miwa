@@ -193,6 +193,8 @@ module.exports = class Profile extends Command {
           }
           case "followers": {
             await r.deferUpdate();
+            if (!users.has(message.author.id)) {
+              users.add(interaction.user.id);
               if(userDBData.social.followers.length == 0) return r.followUp({content: `${e.Size} › ${USER.id == message.author.id ? "**Você** não possui **seguidores**." : "Este **usuário** não possui **seguidores**."}`, ephemeral: true})
               const LIST = new Embed(message.author)
                 .setAuthor({ name: message.author.username, iconURL: message.author.avatarURL() })
@@ -205,6 +207,7 @@ module.exports = class Profile extends Command {
                   .join("\n")}`)
 
               msg.reply({ embeds: [LIST] });
+                    }
             break;
           }
         }
