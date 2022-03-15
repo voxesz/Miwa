@@ -29,11 +29,11 @@ module.exports = class Background extends Command {
     /*.setDescription(`${e.Image} › Seus **Backgrounds**:\n\n> ${e.Folder} | Background: **Default**\n> ${e.Money} | Preço: **0 coins**`)
     .setImage(`https://i.imgur.com/wesq7up.jpg`)*/
 
-    const itens = new Collection()
+    const itens = new Set()
     let actualPage = 1
 
     Object.entries(backgrounds).map(([, x]) => {
-        itens.push(
+        itens.add(
             `> ${e.Image} | Nome: **${x.name}**\n> ${e.ID} | ID: **${x.id}**\n> ${e.Link} | Link: **${x.link}**`
         )
     })
