@@ -214,6 +214,5 @@ module.exports = class Profile extends Command {
           }
         }
       });
-      return users.remove(message.author.id);
   }
 };
