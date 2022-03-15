@@ -196,11 +196,11 @@ module.exports = class Profile extends Command {
             }
             break;
           }
-          case "follows": {
+          case "followers": {
             await r.deferUpdate();
             if (!users.has(message.author.id)) {
               users.add(message.author.id);
-              if(userDBData.social.followers.length == 0) return r.followUp({content: `${e.Size} › ${USER.id == message.author.id ? "**Você** não possui **seguidores**." : "Este **usuário** não possui **seguidores**."}`})
+              if(userDBData.social.followers.length == 0) return r.followUp({content: `${e.Size} › ${USER.id == message.author.id ? "**Você** não possui **seguidores**." : "Este **usuário** não possui **seguidores**."}`, ephemeral: true})
               const LIST = new Embed(message.author)
                 .setAuthor({ name: message.author.username, iconURL: message.author.avatarURL() })
                 .setDescription(`${e.Like} › **Seguidores**:\n\n${userDBData.social.followers
