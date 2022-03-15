@@ -142,6 +142,7 @@ module.exports = class Profile extends Command {
           case "follow": {
             await r.deferUpdate();
             if (!users.has(message.author.id)) {
+              users.add(message.author.id);
               if (userDBData.social.followers.find((x) => x == message.author.id))
                 return r.followUp({
                   content: `${e.Error} › Você **já** segue este **usuário**.`,
@@ -169,6 +170,7 @@ module.exports = class Profile extends Command {
           case "following": {
             await r.deferUpdate();
             if (!users.has(message.author.id)) {
+              users.add(message.author.id);
               if (!userDBData.social.followers.find((x) => x == message.author.id))
                 return r.followUp({
                   content: `${e.Error} › Você **não** segue mais este **usuário**.`,
@@ -197,6 +199,8 @@ module.exports = class Profile extends Command {
           case "follows": {
             await r.deferUpdate();
             if (!users.has(message.author.id)) {
+              users.add(message.author.id);
+              if(userDBData.social.followers.length == 0) return r.followUp({content: `${e.Size} › ${USER.id == message.author.id ? "**Você** não possui **seguidores**." : "Este **usuário** não possui **seguidores**."}`})
               const LIST = new Embed(message.author)
                 .setAuthor({ name: message.author.username, iconURL: message.author.avatarURL() })
                 .setDescription(`${e.Like} › **Seguidores**:\n\n${userDBData.social.followers
@@ -207,7 +211,7 @@ module.exports = class Profile extends Command {
                   )
                   .join("\n")}`)
 
-              msg.reply({ embeds: [LIST] });
+              msg.followUp({ embeds: [LIST] });
             }
             break;
           }
