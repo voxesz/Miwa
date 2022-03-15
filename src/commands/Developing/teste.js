@@ -17,6 +17,8 @@ module.exports = class Teste extends Command {
 
   async execute({ message, args }) {
 
+    const user = await this.client.userDB.findOne({_id: message.author.id})
+
    message.reply(`<t:${~~(28800000 - (Date.now() - user.cooldowns.work) / 1000)}:R>`)
 
   }
