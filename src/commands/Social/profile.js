@@ -200,11 +200,11 @@ module.exports = class Profile extends Command {
                   .map(
                     (x) =>
                       `> ${e.User} | User: **${this.client.users.cache.get(x).tag
-                      }**\n${e.Like} | **${userDBData.social.following.find((y) => y == this.client.users.cache.get(x).id ? "Você o segue" : "Você não o segue")}**`
+                      }**`
                   )
                   .join("\n")}`)
 
-              msg.followUp({ embeds: [LIST] });
+              msg.reply({ embeds: [LIST] });
             break;
           }
         }
