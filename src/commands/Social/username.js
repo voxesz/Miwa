@@ -14,7 +14,7 @@ module.exports = class Username extends Command {
 
   async execute({ message, args }) {
     
-    const regex = new RegExp('[a-z -ZÀ-ÿ]')
+    const regex = new RegExp('^[A-Za-z0-9_-]*$')
     if(!regex.test(`${args[0]}`)) return message.reply(`${e.InsertError} › Seu **nome de usuário** só pode conter **letras**, **números** e **acentos**.`)
     const name = args[0]
     if(!name) return message.reply(`${e.InsertError} › Você **precisa** inserir o **nome** que deseja **definir**.`)
