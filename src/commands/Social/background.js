@@ -41,7 +41,7 @@ module.exports = class Background extends Command {
 
     embed.setDescription(paginatedItens.join(' '))
 
-    const row = new MessageActionRow()
+    let row = new MessageActionRow()
     
     const right = new MessageButton()
     .setCustomId("right")
@@ -53,7 +53,7 @@ module.exports = class Background extends Command {
     .setCustomId("left")
     .setEmoji(e.Left)
     .setStyle("SECONDARY")
-    .setDisabled(false)
+    .setDisabled(true)
 
     if(pages <= 1) left.setDisabled(true)
 
