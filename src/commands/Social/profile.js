@@ -141,8 +141,6 @@ module.exports = class Profile extends Command {
         switch (r.customId) {
           case "follow": {
             await r.deferUpdate();
-            if (!users.has(message.author.id)) {
-              users.add(message.author.id);
               if (userDBData.social.followers.find((x) => x == message.author.id))
                 return r.followUp({
                   content: `${e.Error} › Você **já** segue este **usuário**.`,
@@ -163,14 +161,11 @@ module.exports = class Profile extends Command {
                 }**.`
               );
               row.setComponents([following, followers]);
-            }
             await msg.edit({ components: [row] });
             break;
           }
           case "following": {
             await r.deferUpdate();
-            if (!users.has(message.author.id)) {
-              users.add(message.author.id);
               if (!userDBData.social.followers.find((x) => x == message.author.id))
                 return r.followUp({
                   content: `${e.Error} › Você **não** segue mais este **usuário**.`,
@@ -193,13 +188,10 @@ module.exports = class Profile extends Command {
               });
               row.setComponents([follow, followers]);
               await msg.edit({ components: [row] });
-            }
             break;
           }
           case "followers": {
             await r.deferUpdate();
-            if (!users.has(message.author.id)) {
-              users.add(message.author.id);
               if(userDBData.social.followers.length == 0) return r.followUp({content: `${e.Size} › ${USER.id == message.author.id ? "**Você** não possui **seguidores**." : "Este **usuário** não possui **seguidores**."}`, ephemeral: true})
               const LIST = new Embed(message.author)
                 .setAuthor({ name: message.author.username, iconURL: message.author.avatarURL() })
@@ -212,7 +204,6 @@ module.exports = class Profile extends Command {
                   .join("\n")}`)
 
               msg.followUp({ embeds: [LIST] });
-            }
             break;
           }
         }
