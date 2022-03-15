@@ -9,6 +9,7 @@ const { loadImage, registerFont, createCanvas } = require("canvas");
 registerFont("src/assets/fonts/Montserrat-Bold.ttf", { family: "Bold" });
 registerFont("src/assets/fonts/Montserrat-Medium.ttf", { family: "Medium" });
 registerFont("src/assets/fonts/Montserrat-Regular.ttf", { family: "Regular" });
+const Embed = require('../../structures/Embed')
 const users = new Set();
 
 module.exports = class Profile extends Command {
@@ -154,12 +155,12 @@ module.exports = class Profile extends Command {
                 { _id: USER.id },
                 { $push: { "social.followers": message.author.id } }
               );
-              r.followUp(
-                `${e.Success} › **Agora** você está **seguindo** o(a) **${userDBData.social.name == null
+              r.followUp({
+                content: `${e.Success} › **Agora** você está **seguindo** o(a) **${userDBData.social.name == null
                   ? USER.username
                   : userDBData.social.name
-                }**.`
-              );
+                }**.`, ephemeral: true
+              });
               row.setComponents([following, followers]);
             await msg.edit({ components: [row] });
             break;
