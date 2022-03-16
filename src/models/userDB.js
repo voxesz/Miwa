@@ -18,7 +18,8 @@ let userDB = new Schema({
 		followers: { type: Array, default: [] },
 		following: { type: Array, default: [] },
 		verified: { type: Boolean, default: false },
-		backgrounds: { type: Array, default: [] }
+		backgrounds: { type: Array, default: [1] },
+		actual: { type: Number, default: 1 }
 	}
 });
 

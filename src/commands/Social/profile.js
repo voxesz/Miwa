@@ -30,6 +30,14 @@ module.exports = class Profile extends Command {
     const userDBData = await this.client.userDB.findOne({ _id: USER.id });
     if (!userDBData) return message.reply(`${e.Error} › **Desculpe**, parece que ${USER == message.author ? `**você**` : `esta **pessoa**`} nunca **utilizou** um comando meu.`)
 
+    const backgrounds = {
+      one: { id: "1", link: "https://i.imgur.com/wesq7up.jpg" },
+      two: { id: "2", link: "https://i.imgur.com/KgdBaN9.png" },
+      three: { id: "3", link: "https://i.imgur.com/XWpP8Qs.png" }
+  }
+
+    const bg = Object.values(backgrounds)[userDBData.social.actual - 1].link
+
     const row = new MessageActionRow();
 
     const follow = new MessageButton()
@@ -61,8 +69,8 @@ module.exports = class Profile extends Command {
     const background = await loadImage("./src/assets/img/jpeg/Background.jpeg");
     ctx.drawImage(background, 0, 0, 1000, 600);
 
-    const userBG = await loadImage("./src/assets/img/jpeg/Testes.jpg");
-    ctx.drawImage(userBG, 0, 0, 2560, 1600);
+    const userBG = await loadImage(`${bg}`);
+    ctx.drawImage(userBG, 0, 0, 1000, 600);
 
     const main = await loadImage("./src/assets/img/png/Profile_Card.png");
     ctx.drawImage(main, 0, 0, 1000, 600);
