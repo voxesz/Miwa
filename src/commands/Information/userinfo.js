@@ -30,7 +30,7 @@ module.exports = class Userinfo extends Command {
     ctx.fillStyle = '#1f2430';
     ctx.fillRect(0, 0, 1000, 600)
 
-    ctx.arc(500, 220, 130, 0, Math.PI * 2, true);
+    ctx.arc(70, 60, 130, 0, Math.PI * 2, true);
     ctx.closePath();
     ctx.save();
     ctx.clip();
