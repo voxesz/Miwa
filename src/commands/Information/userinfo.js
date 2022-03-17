@@ -60,7 +60,7 @@ module.exports = class Userinfo extends Command {
 
         list = list
             .join(",")
-            .replace("EARLY_VERIFIED_DEVELOPER", e.Verified_Developer)
+            .replace("EARLY_VERIFIED_BOT_DEVELOPER", e.Verified_Developer)
             .replace("HOUSE_BRAVERY", e.Bravery)
             .replace("HOUSE_BRILLIANCE", e.Brilliance)
             .replace("HOUSE_BALANCE", e.Balance)
