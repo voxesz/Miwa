@@ -30,6 +30,17 @@ module.exports = class Userinfo extends Command {
         ctx.fillStyle = '#1f2430';
         ctx.fillRect(0, 0, 1000, 600)
 
+        ctx.font = '40px "Bold"';
+        ctx.fillStyle = "#FFFFFF";
+        ctx.textAlign = "left";
+        await this.client.renderEmoji(ctx, USER.username, 360, 180);
+        const w = ctx.measureText(USER.username);
+
+        ctx.font = '30px "Regular"';
+        ctx.fillStyle = "#CCCCCC";
+        ctx.textAlign = "left";
+        ctx.fillText(`#${USER.discriminator}`, 360 + w, 180);
+
         ctx.arc(200, 190, 130, 0, Math.PI * 2, true);
         ctx.closePath();
         ctx.save();
@@ -41,17 +52,6 @@ module.exports = class Userinfo extends Command {
         ctx.drawImage(avatar, 70, 60, 260, 260);
 
         ctx.restore()
-
-        ctx.textAlign = "left";
-        ctx.font = '40px "Bold"';
-        ctx.fillStyle = "#FFFFFF";
-        await this.client.renderEmoji(ctx, USER.username, 360, 180);
-        const w = ctx.measureText(USER.username)
-
-        ctx.textAlign = "left";
-        ctx.font = '30px "Regular"';
-        ctx.fillStyle = "#CCCCCC";
-        ctx.fillText(`#${USER.discriminator}`, 360 + w, 180);
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
