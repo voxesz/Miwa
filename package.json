@@ -12,6 +12,7 @@
     "@iamtraction/google-translate": "^1.1.2",
     "canvas": "^2.9.0",
     "child_process": "^1.0.2",
+    "color-thief-node": "^1.0.4",
     "discord.js": "^13.6.0",
     "dotenv": "^16.0.0",
     "figlet": "^1.5.2",
