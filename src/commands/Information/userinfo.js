@@ -38,7 +38,7 @@ module.exports = class Userinfo extends Command {
         const avatar = await loadImage(
             USER.displayAvatarURL({ format: "jpeg", size: 2048 })
         );
-        ctx.drawImage(avatar, 70, 60, 250, 250);
+        ctx.drawImage(avatar, 75, 65, 250, 250);
         ctx.restore()
 
         ctx.font = '50px "Bold"';
