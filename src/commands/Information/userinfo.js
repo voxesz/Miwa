@@ -69,7 +69,7 @@ module.exports = class Userinfo extends Command {
 
         ctx.font = `30px "Bold"`;
 
-        await Utils.renderEmoji(ctx, list.split(",").join(" "), 360, 230);
+        await this.client.renderEmoji(ctx, list.split(",").join(" "), 360, 230);
 
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
