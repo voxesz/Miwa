@@ -49,9 +49,9 @@ module.exports = class Userinfo extends Command {
         const w = ctx.measureText(USER.username)
 
         ctx.textAlign = "left";
-        ctx.font = '20px "Regular"';
+        ctx.font = '30px "Regular"';
         ctx.fillStyle = "#CCCCCC";
-        ctx.fillText(USER.discriminator, 360 + w, 180);
+        ctx.fillText(`#${USER.discriminator}`, 360 + w, 180);
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
