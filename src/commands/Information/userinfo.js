@@ -30,7 +30,7 @@ module.exports = class Userinfo extends Command {
     ctx.fillStyle = '#1f2430';
     ctx.fillRect(0, 0, 1000, 600)
 
-    ctx.arc(70, 60, 130, 0, Math.PI * 2, true);
+    ctx.arc(200, 190, 130, 0, Math.PI * 2, true);
     ctx.closePath();
     ctx.save();
     ctx.clip();
@@ -39,6 +39,8 @@ module.exports = class Userinfo extends Command {
         USER.displayAvatarURL({ format: "jpeg", size: 2048 })
       );
       ctx.drawImage(avatar, 70, 60, 260, 260);
+
+    ctx.restore()
     
     const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
