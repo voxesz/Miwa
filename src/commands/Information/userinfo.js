@@ -52,6 +52,26 @@ module.exports = class Userinfo extends Command {
         ctx.textAlign = "left";
         ctx.fillText(`#${USER.discriminator}`, 360 + w, 180);
 
+        let list = [];
+        const flags = USER.flags === null ? "" : USER.flags.toArray()
+        list.push(flags)
+
+        if (USER.id === process.env.OWNER_ID) list.push("OWNER");
+
+        list = list
+            .join(",")
+            .replace("EARLY_VERIFIED_DEVELOPER", e.Verified_Developer)
+            .replace("HOUSE_BRAVERY", e.Bravery)
+            .replace("HOUSE_BRILLIANCE", e.Brilliance)
+            .replace("HOUSE_BALANCE", e.Balance)
+            .replace("VERIFIED_BOT", e.Verified_Bot)
+            .replace("OWNER", e.Owner)
+
+        ctx.font = `30px "Bold"`;
+
+        await Utils.renderEmoji(ctx, list.split(",").join(" "), 360, 230);
+
+
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
         await message.reply({ files: [attach] });
