@@ -15,6 +15,8 @@ module.exports = class Userinfo extends Command {
         this.category = "Information";
         this.description = "Veja as informações do usuário inserido.";
         this.aliases = ["ui"];
+
+        this.staffOnly = true;
     }
 
     async execute({ message, args }) {
@@ -67,7 +69,7 @@ module.exports = class Userinfo extends Command {
             .replace("VERIFIED_BOT", e.Verified_Bot)
             .replace("OWNER", e.Owner)
 
-        ctx.font = `40px "Regular"`;
+        ctx.font = `30px "Regular"`;
 
         await this.client.renderEmoji(ctx, list.split(",").join(" "), 360, 230);
 
