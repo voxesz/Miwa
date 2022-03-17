@@ -5,7 +5,6 @@ const { loadImage, registerFont, createCanvas } = require("canvas");
 registerFont("src/assets/fonts/Montserrat-Bold.ttf", { family: "Bold" });
 registerFont("src/assets/fonts/Montserrat-Medium.ttf", { family: "Medium" });
 registerFont("src/assets/fonts/Montserrat-Regular.ttf", { family: "Regular" });
-const { getColorFromURL } = require('color-thief-node');
 
 module.exports = class Userinfo extends Command {
   constructor(client) {
@@ -28,10 +27,18 @@ module.exports = class Userinfo extends Command {
     const canvas = createCanvas(1000, 600);
     const ctx = canvas.getContext("2d");
 
-    const avatar = USER.displayAvatarURL({format: "jpeg", size: 2048})
-    const color = await getColorFromURL(avatar)
-    ctx.fillStyle = 'rgb(' + color.join(', ') + ')';
+    ctx.fillStyle = '#1f2430';
     ctx.fillRect(0, 0, 1000, 600)
+
+    ctx.arc(500, 220, 130, 0, Math.PI * 2, true);
+    ctx.closePath();
+    ctx.save();
+    ctx.clip();
+
+    const avatar = await loadImage(
+        USER.displayAvatarURL({ format: "jpeg", size: 2048 })
+      );
+      ctx.drawImage(avatar, 70, 60, 260, 260);
     
     const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
