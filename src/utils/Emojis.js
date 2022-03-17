@@ -87,7 +87,7 @@ module.exports = {
     Blackhole: "<:Blackhole:953050063918211082>",
     Verified_Developer: "<:Developer:954109797958053948>",
     Balance: "<:Balance:954110254432534538>",
-    Brillance: "<:Brilliance:954110254612877432>",
+    Brilliance: "<:Brilliance:954110254612877432>",
     Bravery: "<:Bravery:954110254021509121>",
     Verified_Bot: "<:Bot:954111143910195230>",
     Owner: "<:Owner:954111940525969438>"
