@@ -33,7 +33,8 @@ module.exports = class Profile extends Command {
     const backgrounds = {
       one: { id: "1", link: "https://i.imgur.com/wesq7up.jpg" },
       two: { id: "2", link: "https://i.imgur.com/KgdBaN9.png" },
-      three: { id: "3", link: "https://i.imgur.com/XWpP8Qs.png" }
+      three: { id: "3", link: "https://i.imgur.com/XWpP8Qs.png" },
+      four: { id: "4", link: "https://i.imgur.com/0wmcVBK.png" }
   }
 
     const bg = Object.values(backgrounds)[userDBData.social.actual - 1].link

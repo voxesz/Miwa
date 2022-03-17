@@ -24,7 +24,8 @@ module.exports = class Background extends Command {
         const backgrounds = {
             one: { name: "Default", id: "1", link: "https://i.imgur.com/wesq7up.jpg" },
             two: { name: "Flowers", id: "2", link: "https://i.imgur.com/KgdBaN9.png" },
-            three: { name: "Hole", id: "3", link: "https://i.imgur.com/XWpP8Qs.png" }
+            three: { name: "Hole", id: "3", link: "https://i.imgur.com/XWpP8Qs.png" },
+            four: { name: "Japan", id: "4", link: "https://i.imgur.com/0wmcVBK.png" }
         }
 
         const embed = new Embed(message.author)
@@ -40,7 +41,7 @@ module.exports = class Background extends Command {
             )
         })
 
-        const pages = 3;
+        const pages = 4;
         let paginatedItens = itens.paginate(actualPage, 1)
 
         embed.setDescription(paginatedItens.join(' '))
