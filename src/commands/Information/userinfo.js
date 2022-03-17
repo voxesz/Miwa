@@ -7,15 +7,15 @@ registerFont("src/assets/fonts/Montserrat-Medium.ttf", { family: "Medium" });
 registerFont("src/assets/fonts/Montserrat-Regular.ttf", { family: "Regular" });
 const { getColorFromURL } = require('color-thief-node');
 
-module.exports = class Profile extends Command {
+module.exports = class Userinfo extends Command {
   constructor(client) {
     super(client);
     this.client = client;
 
-    this.name = "profile";
+    this.name = "userinfo";
     this.category = "Social";
-    this.description = "Veja o perfil do usuário inserido.";
-    this.aliases = ["perfil"];
+    this.description = "Veja as informações do usuário inserido.";
+    this.aliases = ["ui"];
   }
 
   async execute({ message, args }) {
