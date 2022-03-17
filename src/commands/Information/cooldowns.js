@@ -19,14 +19,8 @@ module.exports = class Cooldowns extends Command {
       _id: message.author.id,
     });
 
-    const work = moment
-        .duration(
-            28800000 - (Date.now() - user.cooldowns.work)
-        )
-        .format("d[d] h[h] m[m] s[s]"),
-      daily = moment.duration(
-          86400000 - (Date.now() - user.cooldowns.daily)
-      ).format("d[d] h[h] m[m] s[s]")
+    const cooldownW = 28800000,
+    cooldownD = 86400000
 
     let embed = new Embed(message.author)
       .setAuthor({
@@ -34,16 +28,14 @@ module.exports = class Cooldowns extends Command {
         iconURL: message.author.avatarURL(),
       })
       .setDescription(
-        `${e.Config} › Seus **Cooldowns**\n\n ${
-          user.cooldowns.work !== null &&
+        `${e.Config} › Seus **Cooldowns**\n\n ${user.cooldowns.work !== null &&
           28800000 - (Date.now() - user.cooldowns.work) > 0
-            ? `> ${e.Work} | Work: **${work}**`
-            : `> ${e.Work} | Work: **Pode ser utilizado.**`
-        } \n ${
-          user.cooldowns.daily !== null &&
+          ? `> ${e.Work} | Work: **${~~((Date.now() / 1000) + ((cooldownW - (Date.now() - user.cooldowns.work)) / 1000))}**`
+          : `> ${e.Work} | Work: **Pode ser utilizado.**`
+        } \n ${user.cooldowns.daily !== null &&
           86400000 - (Date.now() - user.cooldowns.daily) > 0
-            ? `> ${e.Calendar} | Daily: **${daily}**`
-            : `> ${e.Calendar} | Daily: **Pode ser utilizado.**`
+          ? `> ${e.Calendar} | Daily: **${~~((Date.now() / 1000) + ((cooldownD - (Date.now() - user.cooldowns.work)) / 1000))}**`
+          : `> ${e.Calendar} | Daily: **Pode ser utilizado.**`
         }`
       );
 
