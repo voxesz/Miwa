@@ -30,11 +30,11 @@ module.exports = class Cooldowns extends Command {
       .setDescription(
         `${e.Config} › Seus **Cooldowns**\n\n ${user.cooldowns.work !== null &&
           28800000 - (Date.now() - user.cooldowns.work) > 0
-          ? `> ${e.Work} | Work: **${~~((Date.now() / 1000) + ((cooldownW - (Date.now() - user.cooldowns.work)) / 1000))}**`
+          ? `> ${e.Work} | Work: **<t:${~~((Date.now() / 1000) + ((cooldownW - (Date.now() - user.cooldowns.work)) / 1000))}:R>**`
           : `> ${e.Work} | Work: **Pode ser utilizado.**`
         } \n ${user.cooldowns.daily !== null &&
           86400000 - (Date.now() - user.cooldowns.daily) > 0
-          ? `> ${e.Calendar} | Daily: **${~~((Date.now() / 1000) + ((cooldownD - (Date.now() - user.cooldowns.work)) / 1000))}**`
+          ? `> ${e.Calendar} | Daily: **<t:${~~((Date.now() / 1000) + ((cooldownD - (Date.now() - user.cooldowns.work)) / 1000))}:R>**`
           : `> ${e.Calendar} | Daily: **Pode ser utilizado.**`
         }`
       );
