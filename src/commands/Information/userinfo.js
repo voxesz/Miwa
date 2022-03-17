@@ -40,6 +40,8 @@ module.exports = class Userinfo extends Command {
         );
         ctx.drawImage(avatar, 70, 60, 260, 260);
 
+        ctx.restore()
+
         ctx.textAlign = "left";
         ctx.font = '40px "Bold"';
         ctx.fillStyle = "#FFFFFF";
@@ -50,8 +52,6 @@ module.exports = class Userinfo extends Command {
         ctx.font = '20px "Regular"';
         ctx.fillStyle = "#CCCCCC";
         ctx.fillText(USER.discriminator, 360 + w, 180);
-
-        ctx.restore()
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
