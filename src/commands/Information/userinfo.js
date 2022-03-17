@@ -67,7 +67,7 @@ module.exports = class Userinfo extends Command {
             .replace("VERIFIED_BOT", e.Verified_Bot)
             .replace("OWNER", e.Owner)
 
-        ctx.font = `30px "Bold"`;
+        ctx.font = `40px "Regular"`;
 
         await this.client.renderEmoji(ctx, list.split(",").join(" "), 360, 230);
 
