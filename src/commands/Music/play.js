@@ -89,35 +89,8 @@ module.exports = class Play extends Command {
 
       message.channel.send({ embeds: [embed] });
     } else {
-      const tracks = result.tracks;
-      const msc = tracks[0];
-      const plataform = msc.source;
-      let emoji = e.Youtube;
-      if (plataform == "spotify") emoji = e.Spotify;
-      if (plataform == "deezer") emoji = e.Deezer;
-      if (plataform == "apple-music") emoji = e.Apple;
-      msc.setRequester(message.author);
-      player.queue.push(msc);
-
-      const music = new Embed(message.author)
-          .setAuthor({
-            name: message.guild.name,
-            iconURL: message.guild.iconURL(),
-          })
-          .setDescription(
-            `${e.MusicBox} › Começando a **Música**.\n\n> ${
-              e.Music
-            } | Música: **${msc.title}**\n> ${e.User} | Autor: **${
-              msc.author
-            }**\n> ${emoji} | Plataforma: **${
-              plataform.charAt(0).toUpperCase() +
-              plataform.slice(1).replace("-", " ")
-            }**`
-          );
-
       if (!player.playing) {
         player.play();
-        message.reply({ embeds: [music] });
       } else {
         message.reply(
           `${e.Music} › A música **${msc.title}** foi adicionada a **lista de reprodução**.\n> ${e.User} | **Solicitada** por: ${message.author}`
