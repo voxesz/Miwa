@@ -1,7 +1,6 @@
 const Command = require("../../structures/Command");
 const Embed = require("../../structures/Embed");
 const e = require("../../utils/Emojis");
-const moment = require("moment");
 
 module.exports = class Cooldowns extends Command {
   constructor(client) {

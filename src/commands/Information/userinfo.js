@@ -28,14 +28,11 @@ module.exports = class Userinfo extends Command {
     const canvas = createCanvas(1000, 600);
     const ctx = canvas.getContext("2d");
 
-    /*const avatar = USER.displayAvatarURL()
+    const avatar = USER.displayAvatarURL({format: "jpeg", size: 2048})
     const color = await getColorFromURL(avatar)
     ctx.fillStyle = 'rgb(' + color.join(', ') + ')';
-    ctx.fillRect(0, 0, 1000, 600)*/
-
-    ctx.fillStyle = '#1f2430'
     ctx.fillRect(0, 0, 1000, 600)
-
+    
     const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
     await message.reply({ files: [attach] });
