@@ -30,6 +30,17 @@ module.exports = class Userinfo extends Command {
         ctx.fillStyle = '#1f2430';
         ctx.fillRect(0, 0, 1000, 600)
 
+        ctx.arc(200, 190, 130, 0, Math.PI * 2, true);
+        ctx.closePath();
+        ctx.save();
+        ctx.clip();
+
+        const avatar = await loadImage(
+            USER.displayAvatarURL({ format: "jpeg", size: 2048 })
+        );
+        ctx.drawImage(avatar, 70, 60, 250, 250);
+        ctx.restore()
+
         ctx.font = '50px "Bold"';
         ctx.fillStyle = "#FFFFFF";
         ctx.textAlign = "left";
@@ -40,18 +51,6 @@ module.exports = class Userinfo extends Command {
         ctx.fillStyle = "#B0B0B0";
         ctx.textAlign = "left";
         ctx.fillText(`#${USER.discriminator}`, 360 + w, 180);
-
-        ctx.arc(200, 190, 130, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.save();
-        ctx.clip();
-
-        const avatar = await loadImage(
-            USER.displayAvatarURL({ format: "jpeg", size: 2048 })
-        );
-        ctx.drawImage(avatar, 70, 60, 260, 260);
-
-        ctx.restore()
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
