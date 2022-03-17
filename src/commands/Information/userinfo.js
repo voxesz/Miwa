@@ -30,14 +30,14 @@ module.exports = class Userinfo extends Command {
         ctx.fillStyle = '#1f2430';
         ctx.fillRect(0, 0, 1000, 600)
 
-        ctx.font = '40px "Bold"';
+        ctx.font = '50px "Bold"';
         ctx.fillStyle = "#FFFFFF";
         ctx.textAlign = "left";
         await this.client.renderEmoji(ctx, USER.username, 360, 180);
-        const w = ctx.measureText(USER.username);
+        const w = ctx.measureText(USER.username).width;
 
         ctx.font = '30px "Regular"';
-        ctx.fillStyle = "#CCCCCC";
+        ctx.fillStyle = "#B0B0B0";
         ctx.textAlign = "left";
         ctx.fillText(`#${USER.discriminator}`, 360 + w, 180);
 
