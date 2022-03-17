@@ -13,7 +13,7 @@ module.exports = class Userinfo extends Command {
     this.client = client;
 
     this.name = "userinfo";
-    this.category = "Social";
+    this.category = "Information";
     this.description = "Veja as informações do usuário inserido.";
     this.aliases = ["ui"];
   }
