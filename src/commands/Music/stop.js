@@ -15,7 +15,7 @@ module.exports = class Stop extends Command {
 	async execute ({ message }) {
 		if (message.guild.me.voice.channel != null) {
 			if (
-				message.member.voice.channel.id !=
+				message.member.voice.channelId !=
                 message.guild.me.voice.channel.id ===
               true
 			) {
