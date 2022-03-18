@@ -121,7 +121,7 @@ module.exports = class messageCreate {
       cmd.staffOnly &&
       !this.client.developers.some((x) => x === message.author.id)
     ) {
-      return;
+      return message.reply(`${e.Block} › **Desculpe**, este **comando** só pode ser **utilizado** pelo meu **desenvolvedor**.`)
     }
 
     if (!this.client.developers.some((x) => x === message.author.id)) {
