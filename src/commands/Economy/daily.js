@@ -24,7 +24,7 @@ module.exports = class Daily extends Command {
         _id: message.author.id,
       });
 
-    let coins = Math.floor(Math.random() * 3000);
+    let coins = Math.floor(Math.random() * 2500) + 2000;
     const xp = Math.floor(Math.random() * 100);
     let daily = userDBData.cooldowns.daily;
     let time = 8.64e7 - (Date.now() - daily);

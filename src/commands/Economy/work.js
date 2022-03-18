@@ -28,7 +28,7 @@ module.exports = class Work extends Command {
           .format("d[d] h[h] m[m] s[s]")}** para isso.`
       );
     } else {
-      let amount = Math.floor(Math.random() * 2500) + 2000;
+      let amount = Math.floor(Math.random() * 3000);
 
       message.reply(
         `${e.Success} › você **trabalhou** com sucesso e ganhou:\n> ${
