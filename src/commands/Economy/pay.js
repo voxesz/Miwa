@@ -15,7 +15,6 @@ module.exports = class Pay extends Command {
 
   async execute({ message, args }) {
     let USER = await this.client.getUser(args[0], message);
-    if (!USER) USER = message.author;
 
     const user = await this.client.userDB.findOne({
       _id: message.author.id,

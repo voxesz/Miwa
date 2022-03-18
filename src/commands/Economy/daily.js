@@ -20,7 +20,7 @@ module.exports = class Daily extends Command {
     });
 
     if (!userDBData)
-      await this.client.userDBData.create({
+      await this.client.userDB.create({
         _id: message.author.id,
       });
 

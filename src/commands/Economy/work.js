@@ -16,6 +16,11 @@ module.exports = class Work extends Command {
   async execute({ message, args }) {
     const user = await this.client.userDB.findOne({ _id: message.author.id });
 
+    if (!user)
+      await this.client.userDB.create({
+        _id: message.author.id,
+      });
+
     const xp = Math.floor(Math.random() * 70);
 
     if (
