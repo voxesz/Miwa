@@ -89,6 +89,7 @@ module.exports = class Play extends Command {
 
       message.channel.send({ embeds: [embed] });
     } else {
+      player.queue.push(track);
       if (!player.playing) {
         player.play();
       } else {
