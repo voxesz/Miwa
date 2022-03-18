@@ -31,7 +31,7 @@ module.exports = class {
 		if (plataform == "spotify") emoji = e.Spotify;
 		if (plataform == "deezer") emoji = e.Deezer;
 		if (plataform == "apple-music") emoji = e.Apple;
-		const music = new Embed(track.requester)
+		const music = new Embed(this.client.user)
 			.setAuthor({
 				name: this.client.user.username,
 				iconURL: this.client.user.avatarURL(),
