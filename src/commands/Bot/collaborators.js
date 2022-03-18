@@ -20,7 +20,7 @@ module.exports = class Collaborators extends Command {
         .addFields([
             {
                 name: `${e.Heart} › Colaboradores:`,
-                value: `> [zSplinterUS](https://github.com/zSpl1nterUS)\n> [Niskii](https://github.com/Niskii3)\n> [yJon4s](https://github.com/yJon4ss)`
+                value: `> [zSplinterUS](https://github.com/zSpl1nterUS)\n> [Niskii](https://github.com/Niskii3)\n> [yJon4s](https://github.com/yJon4ss)\n> [Weariful](https://github.com/WearifulCupid0)`
             },
             {
                 name: `${e.Partners} › Parceiros:`,
