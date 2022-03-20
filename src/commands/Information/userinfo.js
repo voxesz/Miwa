@@ -74,7 +74,7 @@ module.exports = class Userinfo extends Command {
         ctx.textAlign = "left";
         ctx.font = '30px "Bold"';
         ctx.fillStyle = "#FFFFFF";
-        await this.client.renderEmoji(ctx, `${e.ID} ID:`, 40, 288);
+        await this.client.renderEmoji(ctx, `${e.ID} ID:`, 40, 320);
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
