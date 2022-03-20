@@ -44,12 +44,12 @@ module.exports = class Userinfo extends Command {
         ctx.textAlign = "center";
         ctx.font = '40px "Bold"';
         ctx.fillStyle = "#EAF0FF";
-        ctx.fillText(USER.username, 500 - dPos, 320);
+        await this.client.renderEmoji(ctx, USER.username, 500 - dPos, 331);
 
         ctx.textAlign = "center";
         ctx.font = '23px "Regular"';
         ctx.fillStyle = "#899AC6";
-        ctx.fillText(`#${USER.discriminator}`, 500 + uPos, 320);
+        ctx.fillText(`#${USER.discriminator}`, 500 + uPos, 331);
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
