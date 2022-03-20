@@ -2,6 +2,7 @@ const Command = require("../../structures/Command");
 const e = require("../../utils/Emojis");
 const { MessageAttachment } = require("discord.js");
 const { loadImage, registerFont, createCanvas } = require("canvas");
+const { getColorFromURL } = require("color-thief-node");
 registerFont("src/assets/fonts/Montserrat-Bold.ttf", { family: "Bold" });
 registerFont("src/assets/fonts/Montserrat-Medium.ttf", { family: "Medium" });
 registerFont("src/assets/fonts/Montserrat-Regular.ttf", { family: "Regular" });
@@ -29,7 +30,9 @@ module.exports = class Userinfo extends Command {
         const canvas = createCanvas(1000, 600);
         const ctx = canvas.getContext("2d");
 
-        ctx.fillStyle = '#1f2430';
+        const color = await getColorFromURL(USER.displayAvatarURL({format: "jpeg", size: 2048}))
+        ctx.fillStyle = 'rgb(' + color.join(', ') + ')';
+        //ctx.fillStyle = '#1f2430';
         ctx.fillRect(0, 0, 1000, 600)
 
         ctx.arc(200, 190, 130, 0, Math.PI * 2, true);
