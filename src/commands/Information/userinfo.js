@@ -6,6 +6,7 @@ const { getColorFromURL } = require("color-thief-node");
 registerFont("src/assets/fonts/Montserrat-Bold.ttf", { family: "Bold" });
 registerFont("src/assets/fonts/Montserrat-Medium.ttf", { family: "Medium" });
 registerFont("src/assets/fonts/Montserrat-Regular.ttf", { family: "Regular" });
+const moment = require('moment')
 
 module.exports = class Userinfo extends Command {
     constructor(client) {
@@ -38,18 +39,37 @@ module.exports = class Userinfo extends Command {
         const background = await loadImage("./src/assets/img/png/Userinfo.png");
         ctx.drawImage(background, 0, 0, 1000, 600);
 
-        const uPos = ctx.measureText(USER.username).width
-        const dPos = ctx.measureText(`#${USER.discriminator}`).width
+        const name = USER.username;
+        const discrim = USER.discriminator;
 
-        ctx.textAlign = "right";
+        ctx.textAlign = "center";
         ctx.font = '40px "Bold"';
         ctx.fillStyle = "#EAF0FF";
         await this.client.renderEmoji(ctx, USER.username, 500, 337);
 
         ctx.textAlign = "left";
-        ctx.font = '23px "Regular"';
+        ctx.font = '23px "Bold"';
+        ctx.fillStyle = "#EAF0FF";
+        ctx.fillText(`ID:`, 89, 416)
+        const iPos = ctx.measureText(`ID:`).width
+
+        ctx.textAlign = "left";
+        ctx.font = '20px "Bold"';
         ctx.fillStyle = "#899AC6";
-        ctx.fillText(`#${USER.discriminator}`, 500, 337);
+        ctx.fillText(USER.id, 89 + iPos, 416)
+
+        ctx.textAlign = "left";
+        ctx.font = '23px "Bold"';
+        ctx.fillStyle = "#EAF0FF";
+        ctx.fillText(`Criação:`, 89, 456)
+        const cPos = ctx.measureText(`ID:`).width
+
+        ctx.textAlign = "left";
+        ctx.font = '20px "Bold"';
+        ctx.fillStyle = "#899AC6";
+        ctx.fillText(moment(
+            this.client.users.cache.get(USER.id).createdAt
+          ).format("L"), 89 + cPos, 456)
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
