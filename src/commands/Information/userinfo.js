@@ -30,7 +30,7 @@ module.exports = class Userinfo extends Command {
         const canvas = createCanvas(1000, 600);
         const ctx = canvas.getContext("2d");
 
-        const color = await getColorFromURL(USER.displayAvatarURL({format: "jpeg", size: 2048}))
+        const color = await getColorFromURL(USER.displayAvatarURL({ format: "jpeg", size: 2048 }))
         ctx.fillStyle = 'rgb(' + color.join(', ') + ')';
         //ctx.fillStyle = '#1f2430';
         ctx.fillRect(0, 0, 1000, 600)
@@ -68,10 +68,13 @@ module.exports = class Userinfo extends Command {
             .replace("HOUSE_BRILLIANCE", e.Brilliance)
             .replace("HOUSE_BALANCE", e.Balance)
             .replace("VERIFIED_BOT", e.Verified_Bot)
-
         ctx.font = `30px "Regular"`;
-
         await this.client.renderEmoji(ctx, list.split(",").join(" "), 360, 230);
+
+        ctx.textAlign = "left";
+        ctx.font = '30px "Bold"';
+        ctx.fillStyle = "#FFFFFF";
+        await this.client.renderEmoji(ctx, `${e.ID} ID:`, 40, 288);
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
