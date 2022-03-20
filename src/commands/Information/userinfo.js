@@ -44,12 +44,12 @@ module.exports = class Userinfo extends Command {
         ctx.textAlign = "right";
         ctx.font = '40px "Bold"';
         ctx.fillStyle = "#EAF0FF";
-        await this.client.renderEmoji(ctx, USER.username, 500 - dPos, 337);
+        await this.client.renderEmoji(ctx, USER.username, 500, 337);
 
         ctx.textAlign = "left";
         ctx.font = '23px "Regular"';
         ctx.fillStyle = "#899AC6";
-        ctx.fillText(`#${USER.discriminator}`, 500 + uPos, 337);
+        ctx.fillText(`#${USER.discriminator}`, 500, 337);
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
