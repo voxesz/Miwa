@@ -71,16 +71,22 @@ module.exports = class Userinfo extends Command {
         ctx.font = `30px "Regular"`;
         await this.client.renderEmoji(ctx, list.split(",").join(" "), 360, 230);
 
-        ctx.textAlign = "left";
-        ctx.font = '30px "Bold"';
-        ctx.fillStyle = "#FFFFFF";
-        await this.client.renderEmoji(ctx, `${e.ID} ID:`, 40, 320);
-        const iPos = ctx.measureText(`${e.ID} ID:`).width
 
         ctx.textAlign = "left";
         ctx.font = '30px "Bold"';
         ctx.fillStyle = "#FFFFFF";
-        ctx.fillText(USER.id, 40 + 2 + iPos, 320);
+        await this.client.renderEmoji(ctx, e.ID, 40, 400);
+
+        ctx.textAlign = "left";
+        ctx.font = '30px "Bold"';
+        ctx.fillStyle = "#FFFFFF";
+        await this.client.renderEmoji(ctx, `${e.ID} ID:`, 50, 400);
+        const iPos = ctx.measureText(`ID:`).width
+
+        ctx.textAlign = "left";
+        ctx.font = '30px "Bold"';
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillText(USER.id, 50 + 2 + iPos, 400);
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
