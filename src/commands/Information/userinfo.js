@@ -30,63 +30,13 @@ module.exports = class Userinfo extends Command {
         const canvas = createCanvas(1000, 600);
         const ctx = canvas.getContext("2d");
 
-        const color = await getColorFromURL(USER.displayAvatarURL({ format: "jpeg", size: 2048 }))
-        ctx.fillStyle = 'rgb(' + color.join(', ') + ')';
-        //ctx.fillStyle = '#1f2430';
-        ctx.fillRect(0, 0, 1000, 600)
-
-        ctx.arc(200, 190, 130, 0, Math.PI * 2, true);
-        ctx.closePath();
-        ctx.save();
-        ctx.clip();
-
         const avatar = await loadImage(
             USER.displayAvatarURL({ format: "jpeg", size: 2048 })
-        );
-        ctx.drawImage(avatar, 70, 60, 260, 260);
-        ctx.restore()
+          );
+        ctx.drawImage(avatar, 383, 53, 250, 250);
 
-        ctx.font = '50px "Bold"';
-        ctx.fillStyle = "#FFFFFF";
-        ctx.textAlign = "left";
-        await this.client.renderEmoji(ctx, USER.username, 360, 180);
-        const w = ctx.measureText(USER.username).width;
-
-        ctx.font = '30px "Regular"';
-        ctx.fillStyle = "#B0B0B0";
-        ctx.textAlign = "left";
-        ctx.fillText(`#${USER.discriminator}`, 360 + w, 180);
-
-        let list = [];
-        const flags = USER.flags === null ? "" : USER.flags.toArray()
-        list.push(flags)
-
-        list = list
-            .join(",")
-            .replace("EARLY_VERIFIED_BOT_DEVELOPER", e.Verified_Developer)
-            .replace("HOUSE_BRAVERY", e.Bravery)
-            .replace("HOUSE_BRILLIANCE", e.Brilliance)
-            .replace("HOUSE_BALANCE", e.Balance)
-            .replace("VERIFIED_BOT", e.Verified_Bot)
-        ctx.font = `30px "Regular"`;
-        await this.client.renderEmoji(ctx, list.split(",").join(" "), 360, 230);
-
-
-        ctx.textAlign = "left";
-        ctx.font = '30px "Bold"';
-        ctx.fillStyle = "#FFFFFF";
-        await this.client.renderEmoji(ctx, e.ID, 40, 400);
-
-        ctx.textAlign = "left";
-        ctx.font = '30px "Bold"';
-        ctx.fillStyle = "#FFFFFF";
-        await this.client.renderEmoji(ctx, `${e.ID} ID:`, 50, 400);
-        const iPos = ctx.measureText(`ID:`).width
-
-        ctx.textAlign = "left";
-        ctx.font = '30px "Bold"';
-        ctx.fillStyle = "#FFFFFF";
-        ctx.fillText(USER.id, 50 + 2 + iPos, 400);
+        const background = await loadImage("./src/assets/img/png/Userinfo.png");
+        ctx.drawImage(background, 0, 0, 1000, 600);
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
