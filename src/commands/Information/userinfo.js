@@ -32,11 +32,24 @@ module.exports = class Userinfo extends Command {
 
         const avatar = await loadImage(
             USER.displayAvatarURL({ format: "jpeg", size: 2048 })
-          );
+        );
         ctx.drawImage(avatar, 383, 53, 250, 250);
 
         const background = await loadImage("./src/assets/img/png/Userinfo.png");
         ctx.drawImage(background, 0, 0, 1000, 600);
+
+        const uPos = ctx.measureText(USER.username).width
+        const dPos = ctx.measureText(`#${USER.discriminator}`).width
+
+        ctx.textAlign = "center";
+        ctx.font = '40px "Bold"';
+        ctx.fillStyle = "#EAF0FF";
+        ctx.fillText(USER.username, 500 - dPos, 320);
+
+        ctx.textAlign = "center";
+        ctx.font = '23px "Regular"';
+        ctx.fillStyle = "#899AC6";
+        ctx.fillText(`#${USER.discriminator}`, 500 + uPos, 320);
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
