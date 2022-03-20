@@ -42,6 +42,12 @@ module.exports = class Userinfo extends Command {
         const name = USER.username;
         const discrim = USER.discriminator;
 
+        ctx.textAlign = 'left';
+        await this.client.renderEmoji(ctx, name, 500, 337)
+
+        ctx.textAlign = 'center';
+        ctx.fillText(discrim(0, 4), 500, 337)
+
         ctx.textAlign = "center";
         ctx.font = '40px "Bold"';
         ctx.fillStyle = "#EAF0FF";
@@ -56,20 +62,20 @@ module.exports = class Userinfo extends Command {
         ctx.textAlign = "left";
         ctx.font = '20px "Bold"';
         ctx.fillStyle = "#899AC6";
-        ctx.fillText(USER.id, 89 + iPos, 416)
+        ctx.fillText(USER.id, 89 + 2 + iPos, 416)
 
         ctx.textAlign = "left";
         ctx.font = '23px "Bold"';
         ctx.fillStyle = "#EAF0FF";
         ctx.fillText(`Criação:`, 89, 456)
-        const cPos = ctx.measureText(`ID:`).width
+        const cPos = ctx.measureText(`Criação:`).width
 
         ctx.textAlign = "left";
         ctx.font = '20px "Bold"';
         ctx.fillStyle = "#899AC6";
         ctx.fillText(moment(
             this.client.users.cache.get(USER.id).createdAt
-          ).format("L"), 89 + cPos, 456)
+          ).format("L"), 89 + 2 + cPos, 456)
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
 
