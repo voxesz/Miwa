@@ -46,7 +46,7 @@ module.exports = class Userinfo extends Command {
         await this.client.renderEmoji(ctx, name, 500, 337)
 
         ctx.textAlign = 'center';
-        ctx.fillText(discrim(0, 4), 500, 337)
+        ctx.fillText(discrim.slice(0, 4), 500, 337)
 
         ctx.textAlign = "center";
         ctx.font = '40px "Bold"';
