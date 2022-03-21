@@ -48,7 +48,7 @@ module.exports = class Userinfo extends Command {
         await this.client.renderEmoji(ctx, name, 500, 337)
         const text = ctx.measureText(name).width;
 
-        ctx.textAlign = 'left';
+        ctx.textAlign = 'center';
         ctx.font = '23px "Regular"';
         ctx.fillStyle = "#899AC6";
         ctx.fillText(`#${discrim.slice(0, 4)}`, 500 + text, 337)
