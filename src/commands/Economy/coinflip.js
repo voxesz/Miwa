@@ -16,10 +16,10 @@ module.exports = class Coinflip extends Command {
 
     const user = await this.client.userDB.findOne({ _id: message.author.id })
 
-    let flipTime = userDBData.cooldowns.coinFlip;
+    let flipTime = user.cooldowns.coinFlip;
     let time = 300000 - (Date.now() - flipTime);
 
-    if (flipTime !== null && 300000 - (Date.now() - daily) > 0) {
+    if (flipTime !== null && 300000 - (Date.now() - flipTime) > 0) {
       return message.reply(
         `${e.Time} › Você **precisa** aguardar **${this.formatTime(
           this.convertMilliseconds(time)
