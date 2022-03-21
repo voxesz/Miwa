@@ -17,8 +17,6 @@ module.exports = class Userinfo extends Command {
         this.category = "Information";
         this.description = "Veja as informações do usuário inserido.";
         this.aliases = ["ui"];
-
-        this.staffOnly = true;
     }
 
     async execute({ message, args }) {
@@ -40,7 +38,6 @@ module.exports = class Userinfo extends Command {
         ctx.drawImage(background, 0, 0, 1000, 600);
 
         const name = USER.username;
-        const discrim = USER.discriminator;
 
         ctx.textAlign = 'center';
         ctx.font = '40px "Bold"';
