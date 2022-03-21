@@ -93,7 +93,22 @@ module.exports = class Userinfo extends Command {
         ctx.textAlign = "right";
         ctx.font = '23px "Bold"';
         ctx.fillStyle = "#EAF0FF";
-        ctx.fillText(`Apelido:`, 908 + 5 + nPos, 416)
+        ctx.fillText(`Apelido:`, 908 - 5 - nPos, 416)
+
+        ctx.textAlign = "right";
+        ctx.font = '20px "Medium"';
+        ctx.fillStyle = "#899AC6";
+        ctx.fillText(moment(
+            this.client.users.cache.get(USER.id).joinedAt
+          ).format("L"), 908, 456)
+        const jPos = ctx.measureText(moment(
+            this.client.users.cache.get(USER.id).joinedAt
+          ).format("L")).width
+
+        ctx.textAlign = "right";
+        ctx.font = '23px "Bold"';
+        ctx.fillStyle = "#EAF0FF";
+        ctx.fillText(`Entrada:`, 908 - 5 - jPos, 456)
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
         await message.reply({ files: [attach] });
