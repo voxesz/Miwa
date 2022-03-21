@@ -19,7 +19,8 @@ module.exports = class Cooldowns extends Command {
     });
 
     const cooldownW = 28800000,
-    cooldownD = 86400000
+    cooldownD = 86400000,
+    cooldownC = 60000
 
     let embed = new Embed(message.author)
       .setAuthor({
@@ -35,7 +36,10 @@ module.exports = class Cooldowns extends Command {
           86400000 - (Date.now() - user.cooldowns.daily) > 0
           ? `> ${e.Calendar} | Daily: **<t:${~~((Date.now() / 1000) + ((cooldownD - (Date.now() - user.cooldowns.work)) / 1000))}:R>**`
           : `> ${e.Calendar} | Daily: **Pode ser utilizado.**`
-        }`
+        } \n ${user.cooldowns.coinFlip !== null &&
+          60000 - (Date.now() - user.cooldowns.coinFlip) > 0
+          ? `> ${e.Calendar} | CoinFlip: **<t:${~~((Date.now() / 1000) + ((cooldownC - (Date.now() - user.cooldowns.coinFlip)) / 1000))}:R>**`
+          : `> ${e.Calendar} | CoinFlip: **Pode ser utilizado.**`}`
       );
 
     message.reply({
