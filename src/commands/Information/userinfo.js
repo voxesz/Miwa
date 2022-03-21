@@ -46,11 +46,12 @@ module.exports = class Userinfo extends Command {
         ctx.font = '40px "Bold"';
         ctx.fillStyle = "#EAF0FF";
         await this.client.renderEmoji(ctx, name, 500, 337)
+        const text = ctx.measureText(name).width;
 
         ctx.textAlign = 'center';
-        ctx.font = '40px "Regular"';
+        ctx.font = '23px "Regular"';
         ctx.fillStyle = "#899AC6";
-        ctx.fillText(discrim.slice(0, 4), 500, 337)
+        ctx.fillText(discrim.slice(0, 4), 500 + text, 337)
 
         ctx.textAlign = "left";
         ctx.font = '23px "Bold"';
