@@ -74,13 +74,13 @@ module.exports = class Userinfo extends Command {
         ctx.textAlign = "left";
         ctx.font = '23px "Bold"';
         ctx.fillStyle = "#EAF0FF";
-        ctx.fillText(`Discriminator:`, 89, 500)
+        ctx.fillText(`Discriminator:`, 89, 496)
         const tPos = ctx.measureText(`Discriminator:`).width
 
         ctx.textAlign = "left";
         ctx.font = '20px "Medium"';
         ctx.fillStyle = "#899AC6";
-        ctx.fillText(`#${USER.discriminator}`, 89 + 5 + tPos, 500)
+        ctx.fillText(`#${USER.discriminator}`, 89 + 5 + tPos, 496)
 
         const userI = await message.guild.members.fetch(USER.id)
         if(userI) {
@@ -119,13 +119,13 @@ module.exports = class Userinfo extends Command {
         ctx.textAlign = "right";
         ctx.font = '20px "Medium"';
         ctx.fillStyle = "#899AC6";
-        ctx.fillText(boosted, 908, 500)
+        ctx.fillText(boosted, 908, 496)
         const bPos = ctx.measureText(boosted).width
 
         ctx.textAlign = "right";
         ctx.font = '23px "Bold"';
         ctx.fillStyle = "#EAF0FF";
-        ctx.fillText(`Booster:`, 908 - 5 - bPos, 500)
+        ctx.fillText(`Booster:`, 908 - 5 - bPos, 496)
 
     }
 
