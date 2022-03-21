@@ -97,8 +97,8 @@ module.exports = class Userinfo extends Command {
           ).format("L")
 
           let nickname;
-          if(userI.nickaname == null) nickname = "Sem apelido."
-          else nickname = userI.nickaname
+          if(userI.nickname == null) nickname = "Sem apelido."
+          else nickname = userI.nickname
 
           const finish = nickname.length > 15 ? slice(0, 15) + "..." : nickname
 
