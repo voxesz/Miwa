@@ -54,7 +54,7 @@ module.exports = class Userinfo extends Command {
         const iPos = ctx.measureText(`ID:`).width
 
         ctx.textAlign = "left";
-        ctx.font = '20px "Bold"';
+        ctx.font = '20px "Medium"';
         ctx.fillStyle = "#899AC6";
         ctx.fillText(USER.id, 89 + 5 + iPos, 416)
 
@@ -65,7 +65,7 @@ module.exports = class Userinfo extends Command {
         const cPos = ctx.measureText(`Criação:`).width
 
         ctx.textAlign = "left";
-        ctx.font = '20px "Bold"';
+        ctx.font = '20px "Medium"';
         ctx.fillStyle = "#899AC6";
         ctx.fillText(moment(
             this.client.users.cache.get(USER.id).createdAt
@@ -74,13 +74,26 @@ module.exports = class Userinfo extends Command {
         ctx.textAlign = "left";
         ctx.font = '23px "Bold"';
         ctx.fillStyle = "#EAF0FF";
-        ctx.fillText(`Discriminator:`, 89, 497)
+        ctx.fillText(`Discriminator:`, 89, 500)
         const tPos = ctx.measureText(`Discriminator:`).width
 
         ctx.textAlign = "left";
-        ctx.font = '20px "Bold"';
+        ctx.font = '20px "Medium"';
         ctx.fillStyle = "#899AC6";
-        ctx.fillText(USER.discriminator, 89 + 5 + tPos, 497)
+        ctx.fillText(`#${USER.discriminator}`, 89 + 5 + tPos, 500)
+
+        const userI = message.guild.members.cache.get(USER.id)
+
+        ctx.textAlign = "right";
+        ctx.font = '20px "Medium"';
+        ctx.fillStyle = "#899AC6";
+        ctx.fillText(userI.nickname, 908, 416)
+        const nPos = ctx.measureText(userI.nickname).width
+
+        ctx.textAlign = "right";
+        ctx.font = '23px "Bold"';
+        ctx.fillStyle = "#EAF0FF";
+        ctx.fillText(`Apelido:`, 908 + 5 + nPos, 416)
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
         await message.reply({ files: [attach] });
