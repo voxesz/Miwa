@@ -100,7 +100,7 @@ module.exports = class Userinfo extends Command {
           if(userI.nickname == null) nickname = "Sem apelido."
           else nickname = userI.nickname
 
-          const finish = nickname.length > 15 ? slice(0, 15) + "..." : nickname
+          const finish = nickname.length > 15 ? nickname.slice(0, 15) + "..." : nickname
 
         ctx.textAlign = "right";
         ctx.font = '20px "Medium"';
