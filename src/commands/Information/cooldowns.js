@@ -38,8 +38,8 @@ module.exports = class Cooldowns extends Command {
           : `> ${e.Calendar} | Daily: **Pode ser utilizado.**`
         } \n ${user.cooldowns.coinFlip !== null &&
           60000 - (Date.now() - user.cooldowns.coinFlip) > 0
-          ? `> ${e.Calendar} | CoinFlip: **<t:${~~((Date.now() / 1000) + ((cooldownC - (Date.now() - user.cooldowns.coinFlip)) / 1000))}:R>**`
-          : `> ${e.Calendar} | CoinFlip: **Pode ser utilizado.**`}`
+          ? `> ${e.Coin} | CoinFlip: **<t:${~~((Date.now() / 1000) + ((cooldownC - (Date.now() - user.cooldowns.coinFlip)) / 1000))}:R>**`
+          : `> ${e.Coin} | CoinFlip: **Pode ser utilizado.**`}`
       );
 
     message.reply({
