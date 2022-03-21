@@ -43,15 +43,14 @@ module.exports = class Userinfo extends Command {
         const discrim = USER.discriminator;
 
         ctx.textAlign = 'left';
+        ctx.font = '40px "Bold"';
+        ctx.fillStyle = "#EAF0FF";
         await this.client.renderEmoji(ctx, name, 500, 337)
 
         ctx.textAlign = 'center';
+        ctx.font = '40px "Regular"';
+        ctx.fillStyle = "#899AC6";
         ctx.fillText(discrim.slice(0, 4), 500, 337)
-
-        ctx.textAlign = "center";
-        ctx.font = '40px "Bold"';
-        ctx.fillStyle = "#EAF0FF";
-        await this.client.renderEmoji(ctx, USER.username, 500, 337);
 
         ctx.textAlign = "left";
         ctx.font = '23px "Bold"';
@@ -78,7 +77,6 @@ module.exports = class Userinfo extends Command {
           ).format("L"), 89 + 2 + cPos, 456)
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
-
         await message.reply({ files: [attach] });
     }
 };
