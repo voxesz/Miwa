@@ -98,7 +98,7 @@ module.exports = class Userinfo extends Command {
         ctx.textAlign = "right";
         ctx.font = '20px "Medium"';
         ctx.fillStyle = "#899AC6";
-        ctx.fillText(userI.nickname == "null" ? "Sem apelido." : userI.nickname, 908, 416)
+        ctx.fillText(userI.nickname == null ? "Sem apelido." : userI.nickname, 908, 416)
         const nPos = ctx.measureText(userI.nickname).width
 
         ctx.textAlign = "right";
@@ -132,6 +132,21 @@ module.exports = class Userinfo extends Command {
         ctx.fillStyle = "#EAF0FF";
         ctx.fillText(`Booster:`, 908 - 5 - bPos, 496)
 
+    } else {
+        ctx.textAlign = "right";
+        ctx.font = '20px "Medium"';
+        ctx.fillStyle = "#899AC6";
+        ctx.fillText("Este membro", 908, 416)
+
+        ctx.textAlign = "right";
+        ctx.font = '20px "Medium"';
+        ctx.fillStyle = "#899AC6";
+        ctx.fillText("Não faz parte", 908, 456)
+
+        ctx.textAlign = "right";
+        ctx.font = '20px "Medium"';
+        ctx.fillStyle = "#899AC6";
+        ctx.fillText("De sua guilda", 908, 496)
     }
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
