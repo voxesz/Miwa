@@ -11,6 +11,7 @@ let userDB = new Schema({
 	cooldowns: {
 		work: { type: Date, default: null },
 		daily: { type: Date, default: null },
+		coinFlip: { type: Date, default: null },
 	},
 	social: {
 		name: { type: String, default: null },
