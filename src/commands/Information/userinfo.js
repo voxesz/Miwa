@@ -90,13 +90,15 @@ module.exports = class Userinfo extends Command {
         
         if(userI) {
 
-        let boosted = "Sem booster."
-        if (userI.premiumSinceTimestamp != null) boosted = moment(
+        let boosted;
+        if (userI.premiumSinceTimestamp == null) boosted = "Sem booster."
+        else boosted = moment(
             userI.premiumSinceTimestamp
           ).format("L")
 
-          let nickname = "Sem apelido."
-          if(userI.nickaname != null) nickname = userI.nickaname
+          let nickname;
+          if(userI.nickaname == null) nickname = "Sem apelido."
+          else nickname = userI.nickaname
 
           const finish = nickname.length > 15 ? slice(0, 15) + "..." : nickname
 
