@@ -82,7 +82,12 @@ module.exports = class Userinfo extends Command {
         ctx.fillStyle = "#899AC6";
         ctx.fillText(`#${USER.discriminator}`, 89 + 5 + tPos, 496)
 
-        const userI = await message.guild.members.fetch(USER.id)
+        let userI;
+        try {
+            userI = await message.guild.members.fetch(USER.id)
+        }
+        catch {}
+        
         if(userI) {
 
         let boosted = "Sem booster."
