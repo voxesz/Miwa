@@ -51,7 +51,7 @@ module.exports = class Userinfo extends Command {
         ctx.textAlign = 'left';
         ctx.font = '23px "Regular"';
         ctx.fillStyle = "#899AC6";
-        ctx.fillText(`#${discrim}`, 500 + text - 10, 337)
+        ctx.fillText(`#${discrim}`, 500 + text - 50, 337)
 
         ctx.textAlign = "left";
         ctx.font = '23px "Bold"';
