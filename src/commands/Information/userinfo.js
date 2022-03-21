@@ -82,12 +82,18 @@ module.exports = class Userinfo extends Command {
         ctx.fillStyle = "#899AC6";
         ctx.fillText(`#${USER.discriminator}`, 89 + 5 + tPos, 500)
 
-        const userI = message.guild.members.cache.get(USER.id)
+        const userI = await message.guild.members.fetch(USER.id)
+        if(userI) {
+
+        let boosted = "Sem booster."
+        if (userI.premiumSinceTimestamp != null) boosted = moment(
+            userI.premiumSinceTimestamp
+          ).format("L")
 
         ctx.textAlign = "right";
         ctx.font = '20px "Medium"';
         ctx.fillStyle = "#899AC6";
-        ctx.fillText(userI.nickname, 908, 416)
+        ctx.fillText(userI.nickname == "null" ? "Sem apelido." : userI.nickname, 908, 416)
         const nPos = ctx.measureText(userI.nickname).width
 
         ctx.textAlign = "right";
@@ -109,6 +115,19 @@ module.exports = class Userinfo extends Command {
         ctx.font = '23px "Bold"';
         ctx.fillStyle = "#EAF0FF";
         ctx.fillText(`Entrada:`, 908 - 5 - jPos, 456)
+
+        ctx.textAlign = "right";
+        ctx.font = '20px "Medium"';
+        ctx.fillStyle = "#899AC6";
+        ctx.fillText(boosted, 908, 500)
+        const bPos = ctx.measureText(boosted).width
+
+        ctx.textAlign = "right";
+        ctx.font = '23px "Bold"';
+        ctx.fillStyle = "#EAF0FF";
+        ctx.fillText(`Booster:`, 908 - 5 - bPos, 500)
+
+    }
 
         const attach = new MessageAttachment(canvas.toBuffer(), "UserInfo.png");
         await message.reply({ files: [attach] });
