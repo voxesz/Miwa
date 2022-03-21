@@ -95,11 +95,16 @@ module.exports = class Userinfo extends Command {
             userI.premiumSinceTimestamp
           ).format("L")
 
+          let nickname = "Sem apelido."
+          if(userI.nickaname != null) nickname = userI.nickaname
+
+          const finish = nickname.length > 15 ? slice(0, 15) + "..." : nickname
+
         ctx.textAlign = "right";
         ctx.font = '20px "Medium"';
         ctx.fillStyle = "#899AC6";
-        ctx.fillText(userI.nickname == null ? "Sem apelido." : userI.nickname, 908, 416)
-        const nPos = ctx.measureText(userI.nickname).width
+        ctx.fillText(finish, 908, 416)
+        const nPos = ctx.measureText(finish).width
 
         ctx.textAlign = "right";
         ctx.font = '23px "Bold"';
