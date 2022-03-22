@@ -20,6 +20,10 @@ module.exports = class {
       guildID: member.guild.id,
     });
 
+    if(!server) await this.client.guildDB.create({
+      guildID: member.guild.id
+    })
+
     if (server.welcome.status == true) {
       if (server.welcome.channel == "null") return;
       const channel = this.client.channels.cache.get(

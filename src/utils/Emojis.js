@@ -90,5 +90,6 @@ module.exports = {
     Brilliance: "<:Brilliance:954110254612877432>",
     Bravery: "<:Bravery:954110254021509121>",
     Verified_Bot: "<:Bot:954111143910195230>",
-    Owner: "<:Owner:954111940525969438>"
+    Owner: "<:Owner:954111940525969438>",
+    Lock: "<:Lock:955777320021524522>"
 }
