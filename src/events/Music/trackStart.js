@@ -46,7 +46,7 @@ module.exports = class {
 
 		channel.send({ embeds: [music] }).then(msg => {
 			setTimeout(() => msg.delete(), 60000)
-		  })
+		  }).catch()
 
 	}
 };

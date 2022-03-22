@@ -79,6 +79,15 @@ module.exports = class Help extends Command {
 
     menuOptions.forEach((option) => {
       switch (option.value) {
+        case "Bot": {
+          menu.addOptions({
+            label: option.label ? option.label : option.value,
+            description: `Comandos relacionados a Miwa.`,
+            value: option.value,
+            emoji: e.Moon,
+          });
+          break;
+        }
         case "Config": {
           menu.addOptions({
             label: option.label ? option.label : option.value,
@@ -106,15 +115,6 @@ module.exports = class Help extends Command {
           });
           break;
         }
-        case "Bot": {
-          menu.addOptions({
-            label: option.label ? option.label : option.value,
-            description: `Comandos relacionados a Miwa.`,
-            value: option.value,
-            emoji: e.Moon,
-          });
-          break;
-        }
         case "Moderation": {
           menu.addOptions({
             label: option.label ? option.label : option.value,
@@ -130,6 +130,15 @@ module.exports = class Help extends Command {
             description: `Utilize para ouvir música no Bot.`,
             value: option.value,
             emoji: e.Music,
+          });
+          break;
+        }
+        case "Social": {
+          menu.addOptions({
+            label: option.label ? option.label : option.value,
+            description: `Comandos relacionados a parte de Rede Social do Bot.`,
+            value: option.value,
+            emoji: e.User,
           });
           break;
         }
