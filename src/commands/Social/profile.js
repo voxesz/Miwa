@@ -205,9 +205,6 @@ module.exports = class Profile extends Command {
             if (!users.has(message.author.id)) {
               users.add(message.author.id);
               if (userDBData.social.followers.length == 0) return r.followUp({ content: `${e.Size} › ${USER.id == message.author.id ? "**Você** não possui **seguidores**." : "Este **usuário** não possui **seguidores**."}`, ephemeral: true })
-              /*let follow = `${USER.id == message.author.id ? "Você" : "Ele(a)"} não o segue.`
-              if (userDBData.social.following.find((x) => x == message.author.id)) follow = `${USER.id == message.author.id ? "Você" : "Ele(a)"} o segue.`*/
-              const follow = userDBData.social.following
               const row = new MessageActionRow()
 
               const close = new MessageButton()
@@ -224,8 +221,8 @@ module.exports = class Profile extends Command {
                     (x) =>
                       `> ${e.User} | User: **${this.client.users.cache.get(x).tag
                       }**\n> ${e.Like} | **${(userDBData.social.following.find((z) => z == this.client.users.cache.get(x).id) ? `${USER.id == message.author.id ? "Você" : "Ele(a)"} o segue.` : `${USER.id == message.author.id ? "Você" : "Ele(a)"} não o segue.`)}**`
-                  )
-                  .join("\n")}`)
+                  ).slice(0, 5)
+                  .join("\n") + `e mais **${userDBData.social.followers - 5}** seguidores.`}`)
 
               var mensagem = await msg.reply({ embeds: [LIST], components: [row] });
               const filter = (interaction) => {

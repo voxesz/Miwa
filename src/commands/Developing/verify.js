@@ -8,7 +8,7 @@ module.exports = class Verify extends Command {
     this.client = client;
 
     this.name = "verify";
-    this.category = "Social";
+    this.category = "Developing";
     this.description = "Verifique o perfil de um usuário.";
     this.aliases = ["verificar"];
 
