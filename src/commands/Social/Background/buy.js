@@ -10,7 +10,7 @@ module.exports = class Buy extends Command {
         this.category = "Social";
         this.description = "Faça a compra de backgrounds.";
         this.aliases = ["comprar", "adquirir"];
-        this.subCommands = ["background"]
+        this.reference = "Background";
 
         this.staffOnly = true;
         this.isSub = true

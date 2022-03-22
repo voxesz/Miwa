@@ -14,6 +14,7 @@ module.exports = class Background extends Command {
         this.description = "Veja os backgrounds que você possui.";
         this.aliases = ["backgrounds", "bg"];
         this.subCommands = ["buy"]
+        this.reference = "Background"
 
         this.staffOnly = true;
     }
