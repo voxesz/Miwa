@@ -222,7 +222,7 @@ module.exports = class Profile extends Command {
                       `> ${e.User} | User: **${this.client.users.cache.get(x).tag
                       }**\n> ${e.Like} | **${(userDBData.social.following.find((z) => z == this.client.users.cache.get(x).id) ? `${USER.id == message.author.id ? "Você" : "Ele(a)"} o segue.` : `${USER.id == message.author.id ? "Você" : "Ele(a)"} não o segue.`)}**`
                   ).slice(0, 5)
-                  .join("\n") + `e mais **${userDBData.social.followers - 5}** seguidores.`}`)
+                  .join("\n") + `\n> E mais **${userDBData.social.followers.length - 5}** seguidores.`}`)
 
               var mensagem = await msg.reply({ embeds: [LIST], components: [row] });
               const filter = (interaction) => {
