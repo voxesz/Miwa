@@ -44,7 +44,7 @@ module.exports = class {
 				}**`
 			);
 
-		channel.send({ embeds: [music] });
+		channel.send({ embeds: [music] }).then(msg=>msg.delete({timeout:"300000"}))
 
 	}
 };
