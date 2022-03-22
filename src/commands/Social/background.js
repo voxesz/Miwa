@@ -22,9 +22,7 @@ module.exports = class Background extends Command {
 
         const subs =
             args[0] &&
-            this.client.subCommands
-                .get(this.reference)
-                .find(
+            this.client.subCommands.get(this.reference).find(
                     (cmd) =>
                         cmd.name.toLowerCase() === args[0].toLowerCase() ||
                         cmd.aliases.includes(args[0].toLowerCase())

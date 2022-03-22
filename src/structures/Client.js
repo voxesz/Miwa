@@ -30,10 +30,10 @@ module.exports = class MiwaClient extends Client {
   load(commandPath, commandName) {
     const props = new (require(`${commandPath}/${commandName}`))(this);
     if(props.sub) {
-      if(!this.subcommands.get(props.reference)) {
-        this.subcommands.set(props.reference, new Collection())
+      if(!this.subCommands.get(props.reference)) {
+        this.subCommands.set(props.reference, new Collection())
       }
-      this.subcommands.get(props.reference).set(props.name, props)
+      this.subCommands.get(props.reference).set(props.name, props)
     }
     if (props.isSub) return;
     props.location = commandPath;
