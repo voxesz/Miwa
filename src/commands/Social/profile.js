@@ -35,7 +35,7 @@ module.exports = class Profile extends Command {
       two: { id: "2", link: "https://i.imgur.com/KgdBaN9.png" },
       three: { id: "3", link: "https://i.imgur.com/XWpP8Qs.png" },
       four: { id: "4", link: "https://i.imgur.com/0wmcVBK.png" }
-  }
+    }
 
     const bg = Object.values(backgrounds)[userDBData.social.actual - 1].link
 
@@ -222,12 +222,12 @@ module.exports = class Profile extends Command {
                       `> ${e.User} | User: **${this.client.users.cache.get(x).tag
                       }**\n> ${e.Like} | **${(userDBData.social.following.find((z) => z == this.client.users.cache.get(x).id) ? `${USER.id == message.author.id ? "Você" : "Ele(a)"} o segue.` : `${USER.id == message.author.id ? "Você" : "Ele(a)"} não o segue.`)}**`
                   ).join("\n") : userDBData.social.followers
-                  .map(
-                    (x) =>
-                      `> ${e.User} | User: **${this.client.users.cache.get(x).tag
-                      }**\n> ${e.Like} | **${(userDBData.social.following.find((z) => z == this.client.users.cache.get(x).id) ? `${USER.id == message.author.id ? "Você" : "Ele(a)"} o segue.` : `${USER.id == message.author.id ? "Você" : "Ele(a)"} não o segue.`)}**`
-                  ).slice(0, 5)
-                  .join("\n") + `\n> E mais **${userDBData.social.followers.length - 5}** seguidores.`}`)
+                    .map(
+                      (x) =>
+                        `> ${e.User} | User: **${this.client.users.cache.get(x).tag
+                        }**\n> ${e.Like} | **${(userDBData.social.following.find((z) => z == this.client.users.cache.get(x).id) ? `${USER.id == message.author.id ? "Você" : "Ele(a)"} o segue.` : `${USER.id == message.author.id ? "Você" : "Ele(a)"} não o segue.`)}**`
+                    ).slice(0, 5)
+                    .join("\n") + `\n> E mais **${userDBData.social.followers.length - 5}** seguidores.`}`)
 
               var mensagem = await msg.reply({ embeds: [LIST], components: [row] });
               const filter = (interaction) => {

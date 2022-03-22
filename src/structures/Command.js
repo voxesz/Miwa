@@ -7,10 +7,12 @@ module.exports = class Command {
 		this.description = 'Descrição';
 		this.aliases = [];
 		this.cooldown = 3;
+		this.subCommands = []
 
 		this.staffOnly = false;
 
 		this.botPermissions = [];
 		this.userPermissions = [];
+		this.isSub = false
 	}
 };

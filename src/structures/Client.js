@@ -15,6 +15,7 @@ module.exports = class MiwaClient extends Client {
     this.commands = new Collection();
     this.aliases = new Collection();
     this.cooldowns = new Collection();
+    this.subCommands = new Collection()
     this.guildDB = guildDB;
     this.userDB = userDB;
     this.clientDB = clientDB;
@@ -28,6 +29,13 @@ module.exports = class MiwaClient extends Client {
 
   load(commandPath, commandName) {
     const props = new (require(`${commandPath}/${commandName}`))(this);
+    if(props.sub) {
+      if(!this.subcommands.get(props.reference)) {
+        this.subcommands.set(props.reference, new Collection())
+      }
+      this.subcommands.get(props.reference).set(props.name, props)
+    }
+    if (props.isSub) return;
     props.location = commandPath;
 
     if (props.init) {

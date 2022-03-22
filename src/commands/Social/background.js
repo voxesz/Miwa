@@ -13,13 +13,40 @@ module.exports = class Background extends Command {
         this.category = "Social";
         this.description = "Veja os backgrounds que você possui.";
         this.aliases = ["backgrounds", "bg"];
+        this.subCommands = ["buy"]
 
         this.staffOnly = true;
     }
 
     async execute({ message, args }) {
 
-        const userDBData = await this.client.userDB.findOne({_id: message.author.id})
+        const subs =
+            args[0] &&
+            this.client.subCommands
+                .get(this.reference)
+                .find(
+                    (cmd) =>
+                        cmd.name.toLowerCase() === args[0].toLowerCase() ||
+                        cmd.aliases.includes(args[0].toLowerCase())
+                )
+
+        let subCommand
+        let sub
+
+        if (!sub) {
+            sub = "null"
+            this.client.subCommands
+                .get(this.reference)
+                .find(
+                    (cmd) =>
+                        cmd.name.toLowerCase() === args[0].toLowerCase() ||
+                        cmd.aliases.includes(args[0].toLowerCase())
+                )
+        } else subCommand = subs;
+
+        if(subCommand != undefined) return subCommand.execute({message, args})
+
+        const userDBData = await this.client.userDB.findOne({ _id: message.author.id })
 
         const backgrounds = {
             one: { name: "Default", id: "1", link: "https://i.imgur.com/wesq7up.jpg" },
@@ -91,7 +118,7 @@ module.exports = class Background extends Command {
                 await msg.edit({ embeds: [embed.setFooter({ text: "O tempo para interagir acabou." })], components: [row] })
             })
             .on('collect', async (r) => {
-                if(r.user.id !== message.author.id) return r.deferUpdate()
+                if (r.user.id !== message.author.id) return r.deferUpdate()
                 switch (r.customId) {
                     case 'right':
                         if (actualPage === pages) return;
@@ -129,12 +156,12 @@ module.exports = class Background extends Command {
                     case 'use':
                         const bgID = Object.values(backgrounds)[actualPage - 1].id
                         const bgName = Object.values(backgrounds)[actualPage - 1].name
-                        await this.client.userDB.findOneAndUpdate({_id: message.author.id}, {$set: {"social.actual": bgID}})
-                        if(userDBData.social.backgrounds.find((x) => x == bgID )) {
-                        await this.client.userDB.findOneAndUpdate({_id: message.author.id}, {$set: {"social.actual": bgID}})
-                    }
+                        await this.client.userDB.findOneAndUpdate({ _id: message.author.id }, { $set: { "social.actual": bgID } })
+                        if (userDBData.social.backgrounds.find((x) => x == bgID)) {
+                            await this.client.userDB.findOneAndUpdate({ _id: message.author.id }, { $set: { "social.actual": bgID } })
+                        }
                         await r.deferUpdate();
-                        return r.followUp({content: `${e.Success} › Background **alterado** com sucesso para **${bgName}**.`, ephemeral: true})
+                        return r.followUp({ content: `${e.Success} › Background **alterado** com sucesso para **${bgName}**.`, ephemeral: true })
                 }
             })
 
