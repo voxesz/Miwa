@@ -216,7 +216,12 @@ module.exports = class Profile extends Command {
               row.setComponents([close]);
               var LIST = new Embed(message.author)
                 .setAuthor({ name: message.author.username, iconURL: message.author.avatarURL() })
-                .setDescription(`${e.Like} › **Seguidores**:\n\n${userDBData.social.followers
+                .setDescription(`${e.Like} › **Seguidores**:\n\n${userDBData.social.followers <= 5 ? userDBData.social.followers
+                  .map(
+                    (x) =>
+                      `> ${e.User} | User: **${this.client.users.cache.get(x).tag
+                      }**\n> ${e.Like} | **${(userDBData.social.following.find((z) => z == this.client.users.cache.get(x).id) ? `${USER.id == message.author.id ? "Você" : "Ele(a)"} o segue.` : `${USER.id == message.author.id ? "Você" : "Ele(a)"} não o segue.`)}**`
+                  ).join("\n") : userDBData.social.followers
                   .map(
                     (x) =>
                       `> ${e.User} | User: **${this.client.users.cache.get(x).tag
